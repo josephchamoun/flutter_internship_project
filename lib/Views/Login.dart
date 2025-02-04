@@ -58,6 +58,7 @@ class Login extends GetView<LoginController> {
                   ),
                   controller: controller.password,
                 ),
+
                 SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(

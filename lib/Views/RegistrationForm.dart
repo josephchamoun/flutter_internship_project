@@ -1,21 +1,18 @@
-
 import 'package:flutter/material.dart';
-import 'package:internship_mobile_project/Routes/AppRoute.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-
 import '../Controllers/RegistrationController.dart';
 
+class Registration extends StatelessWidget {
+  final RegistrationController _registrationController = Get.put(RegistrationController());
 
-class Registration extends GetView<RegistrationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Center(
-          child: Text("Registration Page",
+          child: Text(
+            "Registration Page",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 24,
@@ -31,9 +28,9 @@ class Registration extends GetView<RegistrationController> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-
                 SizedBox(height: 8),
                 TextField(
+                  controller: _registrationController.name, // Link controller
                   decoration: InputDecoration(
                     labelText: 'Enter your name',
                     prefixIcon: Icon(Icons.person),
@@ -41,9 +38,8 @@ class Registration extends GetView<RegistrationController> {
                   ),
                 ),
                 SizedBox(height: 16),
-
-                SizedBox(height: 8),
                 TextField(
+                  controller: _registrationController.email, // Link controller
                   decoration: InputDecoration(
                     labelText: 'Enter your E-mail',
                     prefixIcon: Icon(Icons.email),
@@ -51,10 +47,8 @@ class Registration extends GetView<RegistrationController> {
                   ),
                 ),
                 SizedBox(height: 16),
-
-
-                SizedBox(height: 8),
                 TextField(
+                  controller: _registrationController.password, // Link controller
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Enter your password',
@@ -63,9 +57,21 @@ class Registration extends GetView<RegistrationController> {
                   ),
                 ),
                 SizedBox(height: 20),
+                TextField(
+                  controller: _registrationController.password_confirmation, // Link controller
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password Confirmation',
+                    prefixIcon: Icon(Icons.lock),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _registrationController.submit();  // Call submit method
+                    },
                     child: Text(
                       'Register',
                       style: TextStyle(
@@ -74,7 +80,6 @@ class Registration extends GetView<RegistrationController> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-
                       padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -82,23 +87,18 @@ class Registration extends GetView<RegistrationController> {
                     ),
                   ),
                 ),
+                SizedBox(height: 16),
                 Center(
-                  child: ElevatedButton(
+                  child: TextButton(
                     onPressed: () {
-                      Get.toNamed(AppRoute.login);
+                      // Navigation to Login page
+                      Get.toNamed('/login');
                     },
                     child: Text(
-                      'Login',
+                      'Already have an account? Login',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-
-                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                   ),
@@ -107,7 +107,6 @@ class Registration extends GetView<RegistrationController> {
             ),
           ),
         ),
-
       ),
     );
   }
