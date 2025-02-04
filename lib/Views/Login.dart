@@ -10,6 +10,8 @@ import '../Routes/AppRoute.dart';
 
 
 class Login extends GetView<LoginController> {
+  final LoginController _loginController = Get.put(LoginController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +40,13 @@ class Login extends GetView<LoginController> {
 
                 SizedBox(height: 8),
                 TextField(
+                  controller: _loginController.email, //link controller
                   decoration: InputDecoration(
                     labelText: 'Enter your E-mail',
                     prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(),
                   ),
-                  controller: controller.email,
+
                 ),
                 SizedBox(height: 16),
 
@@ -56,7 +59,7 @@ class Login extends GetView<LoginController> {
                     prefixIcon: Icon(Icons.lock),
                     border: OutlineInputBorder(),
                   ),
-                  controller: controller.password,
+                  controller: _loginController.password,
                 ),
 
                 SizedBox(height: 20),
