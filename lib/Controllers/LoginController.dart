@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Core/Network/DioClient.dart';
 import '../Core/ShowSuccessDialog.dart';
@@ -7,6 +8,23 @@ import '../Models/User.dart';
 class LoginController extends GetxController {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
+
+  late SharedPreferences prefs;
+  @override
+  void onInit() {
+    super.onInit();
+    _loadPrefs();
+  }
+
+void _loadPrefs() async
+{
+  prefs= await SharedPreferences.getInstance();
+  if(prefs.getString('token') != null)
+    {
+      Get.offAllNamed('/mainpage');
+    }
+}
 
   void submit() {
     String emailValue = email.text.trim();
@@ -32,29 +50,36 @@ class LoginController extends GetxController {
   }
 
 
-  void login() async
-  {
-    User user = User(
-      email: email.text,
-      password: password.text,
+  void login() async {
+    try {
+      User user = User(
+        email: email.text,
+        password: password.text,
+      );
 
-    );
-    String requestBody = user.toJson();
+      String requestBody = user.toJson();
 
-    var post = await Dioclient().getInstance().post('/login/apilogin', data: requestBody);
+      var post = await Dioclient().getInstance().post(
+          '/login/apilogin', data: requestBody);
 
-
-    if (post.statusCode == 200) {
-      if (post.data['success']) {
-        ShowSuccessDialog(
-            Get.context!, "Success", "User Login Successfully", () {});
-      }else{
-        ShowSuccessDialog(Get.context!,"failed","User Login Failed",(){});
+      if (post.statusCode == 200) {
+        if (post.data != null && post.data['success'] == true) {
+          ShowSuccessDialog(
+              Get.context!, "Success", "User Login Successfully", () {});
+          print("Token: ${post.data['token']}");
+          prefs.setString('token', post.data['token']);
+          Get.offAllNamed('/mainpage');
+        } else {
+          ShowSuccessDialog(Get.context!, "Failed", "User Login Failed", () {});
+        }
+      } else {
+        ShowSuccessDialog(Get.context!, "Failed", "User Login Failed", () {});
       }
-    }
-      else {
-        ShowSuccessDialog(Get.context!, "Failed", " User Login Failed", () {});
-      }
+    } catch (e) {
+      // Catch any exceptions and display a failure message
+      ShowSuccessDialog(Get.context!, "Error",
+          "Something went wrong. Please try again.", () {});
     }
   }
+}
 

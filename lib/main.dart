@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:internship_mobile_project/Views/RegistrationForm.dart';
 import 'package:get/get.dart';
-import 'package:internship_mobile_project/Bindings/RegistrationBinding.dart';
 
 import 'Routes/AppPage.dart';
 import 'Routes/AppRoute.dart';
-
 
 void main() {
   runApp(const MyApp());
@@ -28,5 +26,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

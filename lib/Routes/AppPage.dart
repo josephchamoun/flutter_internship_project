@@ -4,13 +4,23 @@ import 'package:get/get.dart';
 import 'package:internship_mobile_project/Routes/AppRoute.dart';
 
 import '../Bindings/LoginBinding.dart';
+import '../Bindings/MainpageBinding.dart';
 import '../Views/Login.dart';
+import '../Views/mainpage.dart';
 
 class AppPage{
   static final List <GetPage> pages=
   [
     GetPage(name: AppRoute.register, page: ()=> Registration(), binding: RegistrationBinding() ),
-    GetPage(name: AppRoute.login, page: ()=> Login(), binding: LoginBinding() )
+    GetPage(name: AppRoute.login, page: ()=> Login(), binding: LoginBinding() ),
+    GetPage(name: AppRoute.mainpage, page: ()=> Mainpage(), binding: MainpageBinding() )
   ];
 
 }
+
+
+
+
+
+
+
