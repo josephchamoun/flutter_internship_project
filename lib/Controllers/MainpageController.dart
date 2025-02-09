@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainpageController extends GetxController {
+  // In MainpageController.dart
+  RxInt selectedIndex = 0.obs; // Add this line
   var items = <Item>[].obs;
   var categories = <Category>[].obs;
   var searchTerm = ''.obs;
