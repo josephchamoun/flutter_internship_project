@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:internship_mobile_project/Controllers/CartController.dart';
 import 'package:internship_mobile_project/Controllers/MainpageController.dart';
 import 'package:internship_mobile_project/Models/Category.dart';
 import 'package:internship_mobile_project/Models/Item.dart';
+import 'package:internship_mobile_project/Views/profile.dart';
 import '../components/custom_bottom_navbar.dart';
+import 'cart.dart';
 import 'myorders.dart';
 import 'contact.dart';
 import 'about.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Add this import
 
 class Mainpage extends StatelessWidget {
   final MainpageController _mainpageController = Get.put(MainpageController());
-
-  // Your original content extracted to a widget
-  // ...existing code...
+  final CartController _cartController = Get.put(CartController());
 
   Widget _buildMainContent() {
     return Padding(
@@ -134,6 +136,16 @@ class Mainpage extends StatelessWidget {
                 itemCount: _mainpageController.items.length,
                 itemBuilder: (context, index) {
                   Item item = _mainpageController.items[index];
+                  TextEditingController quantityController =
+                      TextEditingController();
+
+                  // Construct the full image URL if available
+                  String imageUrl = item.imageUrl != null &&
+                          item.imageUrl!.isNotEmpty
+                      ? item.imageUrl!.replaceFirst('http://127.0.0.1:8000',
+                          'http://192.168.1.9:8000' // Use your Wi-Fi adapter's IP
+                          )
+                      : 'fallback_url';
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 8.0),
                     shape: RoundedRectangleBorder(
@@ -141,35 +153,114 @@ class Mainpage extends StatelessWidget {
                     ),
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16.0),
-                      title: Text(item.name,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(item.description),
-                      trailing: Text("\$${item.price}",
+                      title: Text(
+                        item.name,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item.description),
+                          SizedBox(height: 8),
+                          Text("Available Quantity: ${item.quantity ?? 'N/A'}"),
+                          SizedBox(height: 8),
+                          TextField(
+                            controller: quantityController,
+                            decoration: InputDecoration(
+                              labelText: "Enter Quantity",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          SizedBox(height: 8),
+                          ElevatedButton(
+                            onPressed: () {
+                              String enteredQuantity = quantityController.text;
 
-                          // ignore: prefer_const_constructors
-                          style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold)),
-                      leading:
-                          (item.imageUrl != null && item.imageUrl!.isNotEmpty)
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.network(item.imageUrl!,
-                                      width: 50, height: 50, fit: BoxFit.cover),
-                                )
-                              : const Icon(Icons.image_not_supported, size: 50),
+                              if (enteredQuantity.isNotEmpty) {
+                                int quantity = int.parse(enteredQuantity);
+                                if (item.quantity == 0) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          "Item is out of stock. Please check back later."),
+                                    ),
+                                  );
+                                } else if (quantity > 0 &&
+                                    quantity <= item.quantity!) {
+                                  _cartController.addToCart(item, quantity);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          "Invalid quantity. Please enter a value between 1 and ${item.quantity}."),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Please enter a quantity."),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text("Add to Cart"),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 36),
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: Text(
+                        "\$${item.price}",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) {
+                              print(
+                                  "Image load error: $error"); // Check console logs
+                              return Icon(Icons.error);
+                            },
+                          )),
                     ),
                   );
                 },
               );
             }),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: _mainpageController.previousPage,
+                child: const Text("Previous"),
+              ),
+              ElevatedButton(
+                onPressed: _mainpageController.nextPage,
+                child: const Text("Next"),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
-
-// ...existing code...
 
   @override
   Widget build(BuildContext context) {
@@ -180,15 +271,13 @@ class Mainpage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
-              // Navigate to the shopping cart view
-              Get.to(() => AboutView());
+              Get.to(() => CartView());
             },
           ),
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              // Navigate to the profile view
-              Get.to(() => AboutView());
+              Get.to(() => ProfileView());
             },
           ),
         ],
@@ -196,7 +285,7 @@ class Mainpage extends StatelessWidget {
       body: Obx(() {
         switch (_mainpageController.selectedIndex.value) {
           case 0:
-            return _buildMainContent(); // Original functionality
+            return _buildMainContent();
           case 1:
             return const MyOrdersView();
           case 2:

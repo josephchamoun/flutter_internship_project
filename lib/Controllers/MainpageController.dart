@@ -7,14 +7,15 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainpageController extends GetxController {
-  // In MainpageController.dart
-  RxInt selectedIndex = 0.obs; // Add this line
+  RxInt selectedIndex = 0.obs;
   var items = <Item>[].obs;
   var categories = <Category>[].obs;
   var searchTerm = ''.obs;
   var selectedAge = ''.obs;
   var selectedGender = ''.obs;
   var selectedCategory = ''.obs;
+  var currentPage = 1.obs;
+  var isLoading = false.obs;
   TextEditingController searchController = TextEditingController();
   late SharedPreferences prefs;
 
@@ -36,10 +37,11 @@ class MainpageController extends GetxController {
 
   void fetchItems() async {
     try {
+      isLoading.value = true;
       final token = prefs.getString('token');
       final response = await http.get(
         Uri.parse(
-            'http://localhost:8000/api/dashboard?search=${searchTerm.value}&age=${selectedAge.value}&gender=${selectedGender.value}&category=${selectedCategory.value}'),
+            'http://127.0.0.1:8000/api/dashboard?search=${searchTerm.value}&age=${selectedAge.value}&gender=${selectedGender.value}&category=${selectedCategory.value}&page=${currentPage.value}'),
         headers: {
           'Authorization': 'Bearer $token',
         },
@@ -60,6 +62,8 @@ class MainpageController extends GetxController {
     } catch (e) {
       print('Exception: $e');
       Get.snackbar('Error', 'Exception: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -96,6 +100,19 @@ class MainpageController extends GetxController {
   }
 
   void applyFilters() {
+    currentPage.value = 1;
     fetchItems();
+  }
+
+  void nextPage() {
+    currentPage.value++;
+    fetchItems();
+  }
+
+  void previousPage() {
+    if (currentPage.value > 1) {
+      currentPage.value--;
+      fetchItems();
+    }
   }
 }
