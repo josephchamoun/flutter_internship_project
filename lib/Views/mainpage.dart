@@ -277,7 +277,7 @@ class Mainpage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Get.to(() => ProfileView());
+              Get.toNamed('/profile');
             },
           ),
         ],
