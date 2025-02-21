@@ -287,11 +287,21 @@ class Mainpage extends StatelessWidget {
           case 0:
             return _buildMainContent();
           case 1:
-            return const MyOrdersView();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Get.toNamed('/myorders');
+            });
+            return SizedBox
+                .shrink(); // Return an empty widget to prevent duplicate rendering
           case 2:
-            return const ContactView();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Get.toNamed('/myorders');
+            });
+            return SizedBox.shrink();
           case 3:
-            return const AboutView();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Get.toNamed('/myorders');
+            });
+            return SizedBox.shrink();
           default:
             return _buildMainContent();
         }

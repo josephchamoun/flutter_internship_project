@@ -1,8 +1,12 @@
+import 'package:internship_mobile_project/Bindings/MyOrdersBinding.dart';
+import 'package:internship_mobile_project/Bindings/MyOrdersDetailsBinding.dart';
 import 'package:internship_mobile_project/Bindings/ProfileBinding.dart';
 import 'package:internship_mobile_project/Bindings/RegistrationBinding.dart';
 import 'package:internship_mobile_project/Views/RegistrationForm.dart';
 import 'package:get/get.dart';
 import 'package:internship_mobile_project/Routes/AppRoute.dart';
+import 'package:internship_mobile_project/Views/myorders.dart';
+import 'package:internship_mobile_project/Views/myordersdetails.dart';
 import 'package:internship_mobile_project/Views/profile.dart';
 
 import '../Bindings/LoginBinding.dart';
@@ -25,9 +29,14 @@ class AppPage {
         name: AppRoute.profile,
         page: () => Profile(),
         binding: ProfileBinding()),
-      GetPage( 
+    GetPage(
         name: AppRoute.myorders,
         page: () => MyOrders(),
-        binding: MyOrdersBinding())
+        binding: MyOrdersBinding()),
+    GetPage(
+      name: '${AppRoute.myordersdetails}/:orderId', // Accept dynamic orderId
+      page: () => MyOrdersDetails(),
+      binding: MyOrdersDetailsBinding(),
+    ),
   ];
 }
