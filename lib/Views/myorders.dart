@@ -63,6 +63,8 @@ class MyOrders extends StatelessWidget {
                               Text(myorders.created_at),
                               ElevatedButton(
                                 onPressed: () {
+                                  print(
+                                      "[DEBUG] Navigating to order details with orderId: ${myorders.id}");
                                   Get.toNamed(
                                       '/myordersdetails/${myorders.id}');
                                 },
@@ -70,7 +72,7 @@ class MyOrders extends StatelessWidget {
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: Size(double.infinity, 36),
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         ),

@@ -6,32 +6,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:internship_mobile_project/Models/OrderDetails.dart';
 
 class MyOrdersDetailsController extends GetxController {
-  RxInt selectedIndex = 0.obs;
-  var myorders = <OrderDetails>[].obs;
-  var isLoading = false.obs;
-
+  RxBool isLoading = false.obs;
+  Rxn<List<OrderDetails>> orderDetails =
+      Rxn<List<OrderDetails>>(); // Nullable observable list
   late SharedPreferences prefs;
-
-  // Remove baseUrl initialization here
   String baseUrl = '';
 
   @override
   void onInit() {
     super.onInit();
+    print("[DEBUG] MyOrdersDetailsController initialized.");
     _loadPrefs(); // Load preferences before making API call
   }
 
   Future<void> _loadPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('token') == null) {
+    print("[DEBUG] Preferences loaded.");
+
+    String? token = prefs.getString('token');
+    if (token == null) {
+      print("[ERROR] No token found. Redirecting to login.");
+      Get.snackbar("Error", "Session expired. Please log in again.");
       Get.offAllNamed('/login');
     } else {
-      // If token exists, fetch orders
-      fetchOrders();
+      print("[DEBUG] Token found. Fetching order details.");
+      fetchOrderDetails();
     }
   }
 
-  Future<void> fetchOrders() async {
+  Future<void> fetchOrderDetails() async {
     try {
       isLoading.value = true;
       final token = prefs.getString('token');
@@ -40,8 +43,16 @@ class MyOrdersDetailsController extends GetxController {
         return;
       }
 
-      // Dynamically create the URL here
-      String orderId = Get.parameters['orderId'] ?? '';
+      // Fetch the orderId from the route parameters
+      String? orderId = Get.parameters['orderId'];
+
+      if (orderId == null || orderId.isEmpty) {
+        Get.snackbar('Error', 'Order ID is missing');
+        return;
+      }
+
+      print("[DEBUG] Fetching order details for orderId: $orderId");
+
       baseUrl = 'http://127.0.0.1:8000/api/orders/myorder/details/$orderId';
 
       final response = await http.get(
@@ -51,12 +62,13 @@ class MyOrdersDetailsController extends GetxController {
 
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
-        var ordersList = jsonData['data'] as List;
-        myorders.assignAll(
-            ordersList.map((order) => OrderDetails.fromJson(order)).toList());
+        var ordersList = (jsonData['data'] as List)
+            .map((order) => OrderDetails.fromJson(order))
+            .toList();
+        orderDetails.value = ordersList;
       } else {
-        Get.snackbar('Error',
-            'Failed to fetch my order details: ${response.statusCode}');
+        Get.snackbar(
+            'Error', 'Failed to fetch order details: ${response.statusCode}');
       }
     } catch (e) {
       Get.snackbar('Error', 'Exception: $e');

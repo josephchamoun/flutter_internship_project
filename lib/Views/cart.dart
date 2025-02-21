@@ -98,6 +98,11 @@ class CartView extends StatelessWidget {
           );
         }
       }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.shopping_cart_checkout),
+        backgroundColor: Colors.teal,
+      ),
     );
   }
 }
