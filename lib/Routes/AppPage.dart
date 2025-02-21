@@ -24,6 +24,10 @@ class AppPage {
     GetPage(
         name: AppRoute.profile,
         page: () => Profile(),
-        binding: ProfileBinding())
+        binding: ProfileBinding()),
+      GetPage( 
+        name: AppRoute.myorders,
+        page: () => MyOrders(),
+        binding: MyOrdersBinding())
   ];
 }
