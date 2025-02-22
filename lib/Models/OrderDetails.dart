@@ -1,13 +1,13 @@
 class OrderDetails {
-  final int id;
-  final int order_id;
-  final String item;
+  final int? id;
+  final int? order_id;
+  final String? item;
   final int quantity;
 
   OrderDetails({
-    required this.id,
-    required this.order_id,
-    required this.item,
+    this.id,
+    this.order_id,
+    this.item,
     required this.quantity,
   });
 
@@ -18,5 +18,11 @@ class OrderDetails {
       item: json['item']['name'],
       quantity: int.parse(json['quantity'].toString()),
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'item_id': item,
+      'quantity': quantity,
+    };
   }
 }

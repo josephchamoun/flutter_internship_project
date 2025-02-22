@@ -10,6 +10,20 @@ class CartController extends GetxController {
   // Observable list to store cart items
   var cartItems = <Item>[].obs;
 
+  var totalAmount = 0.0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Update totalAmount whenever cartItems change
+    ever(cartItems, (_) => calculateTotalAmount());
+  }
+
+  void calculateTotalAmount() {
+    totalAmount.value = cartItems.fold(
+        0, (sum, item) => sum + (item.price * item.quantityInCart!));
+  }
+
   void addToCart(Item item, int quantity) {
     // Check if the item already exists in the cart
     int index = cartItems.indexWhere((cartItem) => cartItem.name == item.name);
@@ -33,7 +47,9 @@ class CartController extends GetxController {
 
     if (index != -1) {
       // Update the quantity
+
       cartItems[index].quantityInCart = newQuantity;
+
       cartItems.refresh(); // Force UI update
     }
 
@@ -42,6 +58,7 @@ class CartController extends GetxController {
 
   void removeItem(Item item) {
     // Remove the item from the cart
+
     cartItems.removeWhere((cartItem) => cartItem.name == item.name);
     cartItems.refresh(); // Force UI update
 

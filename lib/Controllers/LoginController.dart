@@ -5,10 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Core/Network/DioClient.dart';
 import '../Core/ShowSuccessDialog.dart';
 import '../Models/User.dart';
+
 class LoginController extends GetxController {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-
 
   late SharedPreferences prefs;
   @override
@@ -17,26 +17,22 @@ class LoginController extends GetxController {
     _loadPrefs();
   }
 
-void _loadPrefs() async
-{
-  prefs= await SharedPreferences.getInstance();
-  if(prefs.getString('token') != null)
-    {
+  void _loadPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('token') != null) {
       Get.offAllNamed('/mainpage');
     }
-}
+  }
 
   void submit() {
     String emailValue = email.text.trim();
     String passwordValue = password.text.trim();
 
-
     if (emailValue.isEmpty || !GetUtils.isEmail(emailValue)) {
       Get.snackbar("Error", "Please enter a valid email.");
     } else if (passwordValue.isEmpty) {
       Get.snackbar("Error", "Please enter your password.");
-    }
-    else {
+    } else {
       login();
     }
   }
@@ -49,7 +45,6 @@ void _loadPrefs() async
     super.onClose();
   }
 
-
   void login() async {
     try {
       User user = User(
@@ -59,15 +54,22 @@ void _loadPrefs() async
 
       String requestBody = user.toJson();
 
-      var post = await Dioclient().getInstance().post(
-          '/login/apilogin', data: requestBody);
+      var post = await Dioclient()
+          .getInstance()
+          .post('/login/apilogin', data: requestBody);
 
       if (post.statusCode == 200) {
         if (post.data != null && post.data['success'] == true) {
+          // Save token
+          prefs.setString('token', post.data['token']);
+
+          // Extract and save user ID properly
+          int userId = post.data['user']['id']; // Get it as an integer
+          prefs.setInt('user_id', userId); // Save it as an integer
+
           ShowSuccessDialog(
               Get.context!, "Success", "User Login Successfully", () {});
-          print("Token: ${post.data['token']}");
-          prefs.setString('token', post.data['token']);
+
           Get.offAllNamed('/mainpage');
         } else {
           ShowSuccessDialog(Get.context!, "Failed", "User Login Failed", () {});
@@ -76,10 +78,8 @@ void _loadPrefs() async
         ShowSuccessDialog(Get.context!, "Failed", "User Login Failed", () {});
       }
     } catch (e) {
-      // Catch any exceptions and display a failure message
       ShowSuccessDialog(Get.context!, "Error",
           "Something went wrong. Please try again.", () {});
     }
   }
 }
-

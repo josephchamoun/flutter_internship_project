@@ -54,13 +54,13 @@ class MyOrders extends StatelessWidget {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(myorders.user),
+                              Text(myorders.user ?? "Unknown User"),
                               SizedBox(height: 8),
                               Text("${myorders.total_amount.toString()}" +
                                   " " +
                                   "USD"),
                               SizedBox(height: 8),
-                              Text(myorders.created_at),
+                              Text(myorders.updated_at ?? "No Available Date"),
                               ElevatedButton(
                                 onPressed: () {
                                   print(

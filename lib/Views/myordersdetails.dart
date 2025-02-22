@@ -50,7 +50,7 @@ class MyOrdersDetails extends StatelessWidget {
                 ),
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(16.0),
-                  title: Text(order.item,
+                  title: Text(order.item ?? 'Unknown Item',
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
