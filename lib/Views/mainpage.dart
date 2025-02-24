@@ -55,8 +55,15 @@ class Mainpage extends StatelessWidget {
                     value: _mainpageController.selectedAge.value.isEmpty
                         ? null
                         : _mainpageController.selectedAge.value,
-                    items: ['0-3', '3-6', '6-9', '9-12', '13-17', '18+']
-                        .map((String age) {
+                    items: [
+                      'All Ages',
+                      '0-3',
+                      '3-6',
+                      '6-9',
+                      '9-12',
+                      '13-17',
+                      '18+'
+                    ].map((String age) {
                       return DropdownMenuItem<String>(
                         value: age,
                         child: Text(age),
@@ -98,6 +105,12 @@ class Mainpage extends StatelessWidget {
               const SizedBox(width: 8.0),
               Expanded(
                 child: Obx(() {
+                  // Create a list of categories including "All Categories"
+                  List<Category> categoriesWithAll = [
+                    Category(id: -1, name: 'All'),
+                    ..._mainpageController.categories
+                  ];
+
                   return DropdownButtonFormField<int>(
                     decoration: InputDecoration(
                       labelText: 'Select Category',
@@ -108,8 +121,7 @@ class Mainpage extends StatelessWidget {
                     value: _mainpageController.selectedCategory.value.isEmpty
                         ? null
                         : int.parse(_mainpageController.selectedCategory.value),
-                    items:
-                        _mainpageController.categories.map((Category category) {
+                    items: categoriesWithAll.map((Category category) {
                       return DropdownMenuItem<int>(
                         value: category.id,
                         child: Text(category.name),

@@ -11,9 +11,9 @@ class MainpageController extends GetxController {
   var items = <Item>[].obs;
   var categories = <Category>[].obs;
   var searchTerm = ''.obs;
-  var selectedAge = ''.obs;
-  var selectedGender = ''.obs;
-  var selectedCategory = ''.obs;
+  var selectedAge = 'All Ages'.obs;
+  var selectedGender = 'both'.obs;
+  var selectedCategory = 'All'.obs;
   var currentPage = 1.obs;
   var isLoading = false.obs;
   TextEditingController searchController = TextEditingController();
@@ -39,11 +39,20 @@ class MainpageController extends GetxController {
     try {
       isLoading.value = true;
       final token = prefs.getString('token');
+      if (selectedAge.value == 'All Ages') {
+        selectedAge.value = '';
+      }
+      if (selectedCategory.value == 'All' ||
+          selectedCategory.value == 'All Categories') {
+        selectedCategory.value = '';
+      }
       final response = await http.get(
         Uri.parse(
             'http://127.0.0.1:8000/api/dashboard?search=${searchTerm.value}&age=${selectedAge.value}&gender=${selectedGender.value}&category=${selectedCategory.value}&page=${currentPage.value}'),
         headers: {
           'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
       );
 
