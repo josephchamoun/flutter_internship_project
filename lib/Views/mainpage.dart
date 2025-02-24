@@ -311,7 +311,7 @@ class Mainpage extends StatelessWidget {
             return SizedBox.shrink();
           case 3:
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Get.toNamed('/myorders');
+              Get.toNamed('/about');
             });
             return SizedBox.shrink();
           default:

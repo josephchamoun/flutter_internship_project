@@ -6,4 +6,5 @@ class AppRoute {
   static const String myorders = '/myorders';
   static const String myordersdetails =
       '/myordersdetails'; // Remove :orderId here
+  static const String about = '/about';
 }

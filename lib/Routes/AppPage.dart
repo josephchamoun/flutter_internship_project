@@ -5,6 +5,7 @@ import 'package:internship_mobile_project/Bindings/RegistrationBinding.dart';
 import 'package:internship_mobile_project/Views/RegistrationForm.dart';
 import 'package:get/get.dart';
 import 'package:internship_mobile_project/Routes/AppRoute.dart';
+import 'package:internship_mobile_project/Views/about.dart';
 import 'package:internship_mobile_project/Views/myorders.dart';
 import 'package:internship_mobile_project/Views/myordersdetails.dart';
 import 'package:internship_mobile_project/Views/profile.dart';
@@ -38,5 +39,9 @@ class AppPage {
       page: () => MyOrdersDetails(),
       binding: MyOrdersDetailsBinding(),
     ),
+    GetPage(
+      name: AppRoute.about,
+      page: () => About(),
+    )
   ];
 }
