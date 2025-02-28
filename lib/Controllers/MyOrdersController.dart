@@ -104,9 +104,11 @@ class MyOrdersController extends GetxController {
       }
 
       // Convert cart items to order details
-      List<OrderDetails> orderDetailsList = cartItems.map((item) {
-        return OrderDetails(
-          item: item.id.toString(),
+      List<Item> orderDetailsList = cartItems.map((item) {
+        return Item(
+          id: item.id,
+          price: item.price,
+          name: item.name,
           quantity: item.quantityInCart ?? 1,
         );
       }).toList();

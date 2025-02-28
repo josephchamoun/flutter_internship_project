@@ -21,7 +21,7 @@ class CartController extends GetxController {
 
   void calculateTotalAmount() {
     totalAmount.value = cartItems.fold(
-        0, (sum, item) => sum + (item.price * item.quantityInCart!));
+        0, (sum, item) => sum + (item.price! * item.quantityInCart!));
   }
 
   void addToCart(Item item, int quantity) {

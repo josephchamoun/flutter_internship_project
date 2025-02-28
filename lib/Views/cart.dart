@@ -32,7 +32,7 @@ class CartView extends StatelessWidget {
                     final item = _cartController.cartItems[index];
                     // Make totalAmount a reactive value.
                     RxDouble totalAmount =
-                        (item.price * item.quantityInCart!).obs;
+                        (item.price! * item.quantityInCart!).obs;
 
                     final TextEditingController quantityController =
                         TextEditingController(
@@ -47,7 +47,7 @@ class CartView extends StatelessWidget {
                       child: ListTile(
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        title: Text(item.name,
+                        title: Text(item.name ?? 'Unnamed Item',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Row(
                           children: [
@@ -61,7 +61,7 @@ class CartView extends StatelessWidget {
                                   quantityController.text =
                                       item.quantityInCart.toString();
                                   totalAmount.value =
-                                      item.price * item.quantityInCart!;
+                                      item.price! * item.quantityInCart!;
                                   _cartController.calculateTotalAmount();
                                 }
                               },
@@ -91,7 +91,7 @@ class CartView extends StatelessWidget {
                                   quantityController.text =
                                       item.quantityInCart.toString();
                                   totalAmount.value =
-                                      item.price * item.quantityInCart!;
+                                      item.price! * item.quantityInCart!;
                                   _cartController.calculateTotalAmount();
                                 }
                               },

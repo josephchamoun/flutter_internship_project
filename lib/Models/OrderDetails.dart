@@ -1,7 +1,9 @@
+import 'package:internship_mobile_project/Models/Item.dart';
+
 class OrderDetails {
   final int? id;
   final int? order_id;
-  final String? item;
+  final Item? item;
   final int quantity;
 
   OrderDetails({
@@ -15,13 +17,13 @@ class OrderDetails {
     return OrderDetails(
       id: json['id'],
       order_id: json['order_id'],
-      item: json['item']['name'],
+      item: json['item'] != null ? Item.fromJson(json['item']) : null,
       quantity: int.parse(json['quantity'].toString()),
     );
   }
   Map<String, dynamic> toJson() {
     return {
-      'item_id': item,
+      'item_id': item?.id?.toString(),
       'quantity': quantity,
     };
   }

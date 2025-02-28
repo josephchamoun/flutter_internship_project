@@ -57,7 +57,11 @@ class MyOrdersDetailsController extends GetxController {
 
       final response = await http.get(
         Uri.parse(baseUrl),
-        headers: {'Authorization': 'Bearer $token'},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       );
 
       if (response.statusCode == 200) {

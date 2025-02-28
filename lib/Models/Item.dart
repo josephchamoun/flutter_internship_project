@@ -1,10 +1,10 @@
 class Item {
-  final int id;
-  final String name;
-  final String description;
+  final int? id;
+  final String? name;
+  final String? description;
   int? quantity; // Allow quantity to be nullable
   int? quantityInCart; // Allow quantityInCart to be nullable
-  final double price;
+  final double? price;
   final String? createdAt;
   final String? updatedAt;
   final int? categoryId;
@@ -13,12 +13,12 @@ class Item {
   final String? imageUrl; // Allow imageUrl to be nullable
 
   Item({
-    required this.id,
-    required this.name,
-    required this.description,
+    this.id,
+    this.name,
+    this.description,
     this.quantity, // Allow quantity to be nullable
     this.quantityInCart, // Allow quantityInCart to be nullable
-    required this.price,
+    this.price,
     this.createdAt,
     this.updatedAt,
     this.categoryId,
@@ -46,5 +46,11 @@ class Item {
               '/')) // Replace double slashes with single slash and encode URL
           : null,
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'item_id': id.toString(),
+      'quantity': quantity,
+    };
   }
 }

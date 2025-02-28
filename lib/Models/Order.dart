@@ -1,3 +1,4 @@
+import 'package:internship_mobile_project/Models/Item.dart';
 import 'package:internship_mobile_project/Models/OrderDetails.dart';
 
 class Order {
@@ -7,7 +8,7 @@ class Order {
   final String? user;
   final String? updated_at;
   final double total_amount;
-  final List<OrderDetails>? cart;
+  final List<Item>? cart;
   final int? user_id;
 
   Order({

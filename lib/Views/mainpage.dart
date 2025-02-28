@@ -166,13 +166,13 @@ class Mainpage extends StatelessWidget {
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16.0),
                       title: Text(
-                        item.name,
+                        item.name ?? 'No Name',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(item.description),
+                          Text(item.description ?? 'No Description'),
                           SizedBox(height: 8),
                           Text("Available Quantity: ${item.quantity ?? 'N/A'}"),
                           SizedBox(height: 8),
