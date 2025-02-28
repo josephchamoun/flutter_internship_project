@@ -294,33 +294,28 @@ class Mainpage extends StatelessWidget {
           ),
         ],
       ),
-      body: Obx(() {
-        switch (_mainpageController.selectedIndex.value) {
-          case 0:
-            return _buildMainContent();
-          case 1:
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Get.toNamed('/myorders');
-            });
-            return SizedBox
-                .shrink(); // Return an empty widget to prevent duplicate rendering
-          case 2:
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Get.toNamed('/myorders');
-            });
-            return SizedBox.shrink();
-          case 3:
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Get.toNamed('/about');
-            });
-            return SizedBox.shrink();
-          default:
-            return _buildMainContent();
-        }
-      }),
+      body: _buildMainContent(),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _mainpageController.selectedIndex.value,
-        onTap: (index) => _mainpageController.selectedIndex.value = index,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              Get.offAllNamed('/mainpage'); // 🏠 Navigate to Main Page
+              break;
+            case 1:
+              Get.offAllNamed('/myorders'); // 📦 Navigate to MyOrders
+              break;
+            case 2:
+              Get.offAllNamed('/cart'); // 🛒 Navigate to Cart
+              break;
+            case 3:
+              Get.offAllNamed('/about'); // ℹ️ Navigate to About
+              break;
+            default:
+              Get.offAllNamed('/mainpage');
+              break;
+          }
+        },
       ),
     );
   }

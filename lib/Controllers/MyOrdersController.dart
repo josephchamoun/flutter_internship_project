@@ -68,6 +68,9 @@ class MyOrdersController extends GetxController {
 
   void nextPage() {
     if (!isLoading.value) {
+      if (myorders.isEmpty) {
+        return;
+      }
       currentPage.value++;
       fetchOrders();
     }
@@ -143,6 +146,46 @@ class MyOrdersController extends GetxController {
       } else {
         ShowSuccessDialog(
             Get.context!, "Failed", "Order Placement Failed", () {});
+      }
+    } catch (e) {
+      ShowSuccessDialog(Get.context!, "Error",
+          "Something went wrong. Please try again.", () {});
+    }
+  }
+
+  void deleteOrder(int orderid) async {
+    final token = prefs.getString('token');
+    if (token == null) {
+      Get.snackbar("Error", "Token not found. Please log in again.");
+      Get.offAllNamed('/login');
+      return;
+    }
+
+    try {
+      var delete = await Dioclient().getInstance().delete(
+            '/orders/delete/$orderid',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              },
+            ),
+          );
+
+      if (delete.statusCode == 200 && delete.data != null) {
+        if (delete.data['success'] == true) {
+          ShowSuccessDialog(
+              Get.context!, "Success", "Order Deleted Successfully", () {
+            // Refresh the orders list after deletion
+            fetchOrders();
+          });
+        } else {
+          ShowSuccessDialog(
+              Get.context!, "Failed", "Order Failed to be deleted", () {});
+        }
+      } else {
+        ShowSuccessDialog(Get.context!, "Failed", "Order Delete Failed", () {});
       }
     } catch (e) {
       ShowSuccessDialog(Get.context!, "Error",

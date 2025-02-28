@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class About extends StatelessWidget {
   const About({super.key});
@@ -10,6 +12,12 @@ class About extends StatelessWidget {
         title: const Text('About Us'),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Get.offAllNamed('/mainpage'); // Go back to Main Page properly
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
