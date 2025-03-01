@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internship_mobile_project/Controllers/MyOrdersDetailsController.dart';
-import 'package:internship_mobile_project/Models/Item.dart';
-import 'package:internship_mobile_project/Models/Order.dart';
 import 'package:internship_mobile_project/Models/OrderDetails.dart';
 
+// ignore: must_be_immutable
 class MyOrdersDetails extends StatelessWidget {
   MyOrdersDetails({Key? key}) : super(key: key);
 
   final MyOrdersDetailsController _controller =
       Get.put(MyOrdersDetailsController());
+  final String? orderId = Get.parameters['orderId'];
+
+  RxList<String> allquantities = <String>[].obs; // Reactive quantity list
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,12 @@ class MyOrdersDetails extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Order Details"),
         backgroundColor: Colors.teal.shade700,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Get.offAllNamed('/myorders'); // Go back to My Orders page
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -30,6 +38,13 @@ class MyOrdersDetails extends StatelessWidget {
             return const Center(child: Text("No order details found."));
           }
 
+          // Initialize `allquantities` when data is loaded
+          if (allquantities.isEmpty) {
+            allquantities.addAll(_controller.orderDetails.value!
+                .map((order) => order.quantity.toString())
+                .toList());
+          }
+
           return Column(
             children: [
               Expanded(
@@ -38,9 +53,6 @@ class MyOrdersDetails extends StatelessWidget {
                   separatorBuilder: (context, index) => const Divider(),
                   itemBuilder: (context, index) {
                     OrderDetails order = _controller.orderDetails.value![index];
-
-                    TextEditingController quantityController =
-                        TextEditingController(text: order.quantity.toString());
 
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -69,24 +81,36 @@ class MyOrdersDetails extends StatelessWidget {
                                             color: Colors.redAccent),
                                         onPressed: () {
                                           int currentQuantity = int.tryParse(
-                                                  quantityController.text) ??
+                                                  allquantities[index]) ??
                                               1;
                                           if (currentQuantity > 1) {
-                                            quantityController.text =
+                                            allquantities[index] =
                                                 (currentQuantity - 1)
                                                     .toString();
                                           }
                                         },
                                       ),
                                       SizedBox(
-                                        width: 40,
+                                        width: 50,
                                         child: TextField(
-                                          controller: quantityController,
                                           keyboardType: TextInputType.number,
                                           textAlign: TextAlign.center,
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
                                           ),
+                                          onChanged: (value) {
+                                            // Ensure quantity is never null or empty, set it to 1 if invalid
+                                            if (value.isEmpty) {
+                                              allquantities[index] = '1';
+                                            } else {
+                                              int newQuantity =
+                                                  int.tryParse(value) ?? 1;
+                                              allquantities[index] =
+                                                  newQuantity.toString();
+                                            }
+                                          },
+                                          controller: TextEditingController(
+                                              text: allquantities[index]),
                                         ),
                                       ),
                                       IconButton(
@@ -94,9 +118,9 @@ class MyOrdersDetails extends StatelessWidget {
                                             color: Colors.green),
                                         onPressed: () {
                                           int currentQuantity = int.tryParse(
-                                                  quantityController.text) ??
+                                                  allquantities[index]) ??
                                               1;
-                                          quantityController.text =
+                                          allquantities[index] =
                                               (currentQuantity + 1).toString();
                                         },
                                       ),
@@ -105,14 +129,14 @@ class MyOrdersDetails extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Text(
-                              "Total: \$${(order.quantity).toStringAsFixed(2)}",
-                              style: const TextStyle(
-                                color: Colors.green,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            Obx(() => Text(
+                                  "Total: \$${((order.item?.price ?? 0) * (int.tryParse(allquantities[index]) ?? 1)).toStringAsFixed(2)}",
+                                  style: const TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
                             const SizedBox(width: 16),
                             ElevatedButton(
                               onPressed: () {
@@ -136,7 +160,39 @@ class MyOrdersDetails extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   print("[DEBUG] Save button clicked");
-                  // Implement save functionality
+
+                  if (orderId != null) {
+                    // Collect updated order details with new quantities
+                    List<OrderDetails> updatedOrderDetails = _controller
+                        .orderDetails.value!
+                        .asMap()
+                        .entries
+                        .map((entry) {
+                      int idx = entry.key;
+                      OrderDetails order = entry.value;
+                      int updatedQuantity =
+                          int.tryParse(allquantities[idx]) ?? order.quantity;
+
+                      return OrderDetails(
+                        id: order.id,
+                        item: order.item,
+                        quantity: updatedQuantity,
+                      );
+                    }).toList();
+
+                    print("[DEBUG] Updated Quantities: $allquantities");
+                    print(
+                        "[DEBUG] Updated Order Details: $updatedOrderDetails");
+
+                    // Update the order with the new order details
+                    _controller.updateOrder(
+                        int.parse(orderId!), updatedOrderDetails);
+
+                    print(
+                        "[DEBUG] Order updated with orderId: $orderId and updated order details: $updatedOrderDetails");
+                  } else {
+                    print("[ERROR] orderId is null, cannot update order.");
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),

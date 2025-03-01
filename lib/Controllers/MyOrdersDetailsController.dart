@@ -1,6 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:internship_mobile_project/Core/Network/DioClient.dart';
+import 'package:internship_mobile_project/Core/ShowSuccessDialog.dart';
+import 'package:internship_mobile_project/Models/Item.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:internship_mobile_project/Models/OrderDetails.dart';
@@ -78,6 +82,62 @@ class MyOrdersDetailsController extends GetxController {
       Get.snackbar('Error', 'Exception: $e');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void updateOrder(int orderid, List<OrderDetails> itemsupdated) async {
+    final token = prefs.getString('token');
+    if (token == null) {
+      Get.snackbar("Error", "Token not found. Please log in again.");
+      Get.offAllNamed('/login');
+      return;
+    }
+
+    List<OrderDetails> finalitems = itemsupdated.map((orderdet) {
+      return OrderDetails(
+        item: orderdet.item,
+        quantity: orderdet.quantity,
+      );
+    }).toList();
+
+    try {
+      Map<String, dynamic> requestBody = {
+        'items': finalitems.map((orderdet) {
+          return {
+            'id': orderdet.item?.id, // Get item ID instead of orderDetails ID
+            'quantity': orderdet.quantity,
+          };
+        }).toList()
+      };
+
+      var update = await Dioclient().getInstance().put(
+            '/orders/update/$orderid',
+            data: requestBody,
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              },
+            ),
+          );
+
+      if (update.statusCode == 200 && update.data != null) {
+        if (update.data['message'] == "Order updated successfully") {
+          ShowSuccessDialog(
+              Get.context!, "Success", "Order Updated Successfully", () {
+            // Refresh the orders list after update
+          });
+        } else {
+          ShowSuccessDialog(
+              Get.context!, "Failed", "Order Failed to be updated", () {});
+        }
+      } else {
+        ShowSuccessDialog(Get.context!, "Failed", "Order update Failed", () {});
+      }
+    } catch (e) {
+      ShowSuccessDialog(Get.context!, "Error",
+          "Something went wrong. Please try again.", () {});
     }
   }
 }

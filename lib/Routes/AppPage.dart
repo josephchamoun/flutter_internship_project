@@ -35,7 +35,7 @@ class AppPage {
         page: () => MyOrders(),
         binding: MyOrdersBinding()),
     GetPage(
-      name: '${AppRoute.myordersdetails}/:orderId', // Accept dynamic orderId
+      name: AppRoute.myordersdetails, // Do NOT include "/:orderId" here
       page: () => MyOrdersDetails(),
       binding: MyOrdersDetailsBinding(),
     ),

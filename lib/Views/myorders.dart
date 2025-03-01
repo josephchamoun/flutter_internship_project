@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internship_mobile_project/Controllers/MyOrdersController.dart';
 import 'package:internship_mobile_project/Models/Order.dart';
+import 'package:internship_mobile_project/Routes/AppRoute.dart';
 import 'package:internship_mobile_project/Views/mainpage.dart';
 import 'package:internship_mobile_project/Controllers/MainpageController.dart';
 
@@ -116,7 +117,10 @@ class MyOrders extends StatelessWidget {
                               onPressed: () {
                                 print(
                                     "[DEBUG] Navigating to order details with orderId: ${myorders.id}");
-                                Get.toNamed('/myordersdetails/${myorders.id}');
+                                Get.toNamed(AppRoute.myordersdetails,
+                                    parameters: {
+                                      'orderId': myorders.id.toString()
+                                    });
                               },
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size(double.infinity, 40),

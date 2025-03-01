@@ -7,7 +7,7 @@ class Order {
   final String? created_at;
   final String? user;
   final String? updated_at;
-  final double total_amount;
+  final double? total_amount;
   final List<Item>? cart;
   final int? user_id;
 
@@ -15,7 +15,7 @@ class Order {
     this.id,
     this.status,
     this.user,
-    required this.total_amount,
+    this.total_amount,
     this.created_at,
     this.updated_at,
     this.cart,
