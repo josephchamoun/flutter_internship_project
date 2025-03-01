@@ -140,4 +140,44 @@ class MyOrdersDetailsController extends GetxController {
           "Something went wrong. Please try again.", () {});
     }
   }
+
+/*
+  void deleteOrderDetails(int orderId) async {
+    final token = prefs.getString('token');
+    if (token == null) {
+      Get.snackbar("Error", "Token not found. Please log in again.");
+      Get.offAllNamed('/login');
+      return;
+    }
+
+    try {
+      var response = await Dioclient().getInstance().delete(
+            '/orders/delete/$orderId',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              },
+            ),
+          );
+
+      if (response.statusCode == 200 && response.data != null) {
+        if (response.data['message'] == "Order deleted successfully") {
+          ShowSuccessDialog(
+              Get.context!, "Success", "Order Deleted Successfully", () {
+            // Refresh the orders list after delete
+          });
+        } else {
+          ShowSuccessDialog(
+              Get.context!, "Failed", "Order Failed to be deleted", () {});
+        }
+      } else {
+        ShowSuccessDialog(Get.context!, "Failed", "Order delete Failed", () {});
+      }
+    } catch (e) {
+      ShowSuccessDialog(Get.context!, "Error",
+          "Something went wrong. Please try again.", () {});
+    }
+  }*/
 }

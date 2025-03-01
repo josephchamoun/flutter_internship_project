@@ -67,31 +67,45 @@ class MyOrders extends StatelessWidget {
                                     fontSize: 16,
                                   ),
                                 ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete,
-                                      color: Colors.red),
-                                  onPressed: () {
-                                    Get.defaultDialog(
-                                      title: "Confirm Deletion",
-                                      middleText:
-                                          "Are you sure you want to delete this order?",
-                                      textConfirm: "Yes",
-                                      textCancel: "No",
-                                      confirmTextColor: Colors.white,
-                                      buttonColor: Colors.red,
-                                      onConfirm: () {
-                                        print(
-                                            "[DEBUG] Deleting order: ${myorders.id}");
-                                        _myordersController
-                                            .deleteOrder(myorders.id!);
-                                        Get.back(); // Close the dialog
-                                      },
-                                      onCancel: () {
-                                        print("[DEBUG] Deletion cancelled.");
-                                      },
-                                    );
-                                  },
-                                ),
+                                myorders.status == "shipped"
+                                    ? Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green.withOpacity(0.2),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: const Text(
+                                          "Shipped",
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    : IconButton(
+                                        icon: const Icon(Icons.delete,
+                                            color: Colors.red),
+                                        onPressed: () {
+                                          Get.defaultDialog(
+                                            title: "Confirm Deletion",
+                                            middleText:
+                                                "Are you sure you want to delete this order?",
+                                            textConfirm: "Yes",
+                                            textCancel: "No",
+                                            confirmTextColor: Colors.white,
+                                            buttonColor: Colors.red,
+                                            onConfirm: () {
+                                              print(
+                                                  "[DEBUG] Deleting order: ${myorders.id}");
+                                              _myordersController
+                                                  .deleteOrder(myorders.id!);
+                                              Get.back(); // Close the dialog
+                                            },
+                                          );
+                                        },
+                                      ),
                               ],
                             ),
                             const SizedBox(height: 8),
@@ -119,7 +133,8 @@ class MyOrders extends StatelessWidget {
                                     "[DEBUG] Navigating to order details with orderId: ${myorders.id}");
                                 Get.toNamed(AppRoute.myordersdetails,
                                     parameters: {
-                                      'orderId': myorders.id.toString()
+                                      'orderId': myorders.id.toString(),
+                                      'orderStatus': myorders.status.toString()
                                     });
                               },
                               style: ElevatedButton.styleFrom(
