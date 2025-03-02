@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:internship_mobile_project/Controllers/ProfileController.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  final ProfileController _profileController = Get.put(ProfileController());
+  Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +37,21 @@ class Profile extends StatelessWidget {
                               color: Colors.blueAccent)),
                       SizedBox(height: 12),
                       TextField(
+                        controller: _profileController.name,
                         decoration: InputDecoration(
                             labelText: "Name", border: OutlineInputBorder()),
                       ),
                       SizedBox(height: 12),
                       TextField(
+                        controller: _profileController.email,
                         decoration: InputDecoration(
                             labelText: "Email", border: OutlineInputBorder()),
                       ),
                       SizedBox(height: 12),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _profileController.updateProfile();
+                        },
                         child: Text("Save"),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blueAccent),
@@ -70,6 +78,7 @@ class Profile extends StatelessWidget {
                               color: Colors.blueAccent)),
                       SizedBox(height: 12),
                       TextField(
+                        controller: _profileController.oldpassword,
                         decoration: InputDecoration(
                             labelText: "Current Password",
                             border: OutlineInputBorder()),
@@ -77,6 +86,7 @@ class Profile extends StatelessWidget {
                       ),
                       SizedBox(height: 12),
                       TextField(
+                        controller: _profileController.password,
                         decoration: InputDecoration(
                             labelText: "New Password",
                             border: OutlineInputBorder()),
@@ -84,6 +94,7 @@ class Profile extends StatelessWidget {
                       ),
                       SizedBox(height: 12),
                       TextField(
+                        controller: _profileController.password_confirmation,
                         decoration: InputDecoration(
                             labelText: "Confirm New Password",
                             border: OutlineInputBorder()),
@@ -91,7 +102,9 @@ class Profile extends StatelessWidget {
                       ),
                       SizedBox(height: 12),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _profileController.updatePassword();
+                        },
                         child: Text("Save"),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blueAccent),
