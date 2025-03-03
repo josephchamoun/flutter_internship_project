@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:internship_mobile_project/Controllers/ProfileController.dart';
 
 class Profile extends StatelessWidget {
@@ -20,6 +19,18 @@ class Profile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Floating Action Button for Logout
+              Align(
+                alignment: Alignment.topLeft,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    _profileController.logout();
+                  },
+                  child: Icon(Icons.logout),
+                  backgroundColor: Colors.blueAccent,
+                ),
+              ),
+              SizedBox(height: 20),
               // Profile Update Section
               Card(
                 elevation: 4,

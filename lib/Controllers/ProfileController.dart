@@ -20,6 +20,12 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
     _loadPrefs(); // Load preferences before making API call
+    _loadProfileData();
+  }
+
+  void logout() async {
+    prefs.remove('token');
+    Get.offAllNamed('/login');
   }
 
   Future<void> _loadPrefs() async {
@@ -27,6 +33,12 @@ class ProfileController extends GetxController {
     if (prefs.getString('token') == null) {
       Get.offAllNamed('/login');
     }
+  }
+
+  void _loadProfileData() async {
+    prefs = await SharedPreferences.getInstance();
+    name.text = prefs.getString('user_name') ?? '';
+    email.text = prefs.getString('user_email') ?? '';
   }
 
   void updateProfile() async {
@@ -113,5 +125,56 @@ class ProfileController extends GetxController {
       ShowSuccessDialog(Get.context!, "Error",
           "Something went wrong. Please try again.", () {});
     }
+  }
+
+  void deleteUser() async {
+    final token = prefs.getString('token');
+    if (token == null) {
+      Get.snackbar("Error", "Token not found. Please log in again.");
+      Get.offAllNamed('/login');
+      return;
+    }
+
+    try {
+      var delete = await Dioclient().getInstance().delete(
+            '/person/delete',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              },
+            ),
+          );
+
+      if (delete.statusCode == 200 && delete.data != null) {
+        if (delete.data['success'] == true) {
+          ShowSuccessDialog(
+              Get.context!, "Success", "Order Deleted Successfully", () {
+            // Refresh the orders list after deletion
+            Get.offAllNamed('/login');
+          });
+        } else {
+          ShowSuccessDialog(
+              Get.context!, "Failed", "User Failed to be deleted", () {});
+        }
+      } else {
+        ShowSuccessDialog(Get.context!, "Failed", "User Delete Failed", () {});
+      }
+    } catch (e) {
+      ShowSuccessDialog(Get.context!, "Error",
+          "Something went wrong. Please try again.", () {});
+    }
+  }
+
+  @override
+  void onClose() {
+    // Dispose controllers when no longer needed
+    name.dispose();
+    email.dispose();
+    oldpassword.dispose();
+    password.dispose();
+    password_confirmation.dispose();
+    super.onClose();
   }
 }

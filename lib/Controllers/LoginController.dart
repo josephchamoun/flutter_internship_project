@@ -62,10 +62,13 @@ class LoginController extends GetxController {
         if (post.data != null && post.data['success'] == true) {
           // Save token
           prefs.setString('token', post.data['token']);
-
-          // Extract and save user ID properly
           int userId = post.data['user']['id']; // Get it as an integer
-          prefs.setInt('user_id', userId); // Save it as an integer
+          String userName = post.data['user']['name']; // Get the user's name
+          String userEmail = post.data['user']['email']; // Get the user's email
+
+          prefs.setInt('user_id', userId); // Save user ID as an integer
+          prefs.setString('user_name', userName); // Save user name as a string
+          prefs.setString('user_email', userEmail); // Save user email as
 
           ShowSuccessDialog(
               Get.context!, "Success", "User Login Successfully", () {});

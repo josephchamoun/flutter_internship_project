@@ -36,8 +36,8 @@ class About extends StatelessWidget {
             const SizedBox(height: 20),
             const CircleAvatar(
               radius: 60,
-              backgroundImage:
-                  AssetImage('assets/logo.png'), // Add your app logo here
+              backgroundImage: AssetImage(
+                  'assets/images/kids toys store.png'), // Add your app logo here
             ),
             const SizedBox(height: 20),
             const Text(
@@ -112,7 +112,7 @@ class About extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Add functionality to navigate back or perform an action
-                Navigator.pop(context);
+                Get.toNamed('/mainpage');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
