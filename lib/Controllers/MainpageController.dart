@@ -42,8 +42,8 @@ class MainpageController extends GetxController {
       if (selectedAge.value == 'All Ages') {
         selectedAge.value = '';
       }
-      if (selectedCategory.value == 'All' ||
-          selectedCategory.value == 'All Categories') {
+
+      if (selectedCategory.value == 'All' || selectedCategory.value == '-1') {
         selectedCategory.value = '';
       }
       final response = await http.get(
@@ -114,11 +114,18 @@ class MainpageController extends GetxController {
   }
 
   void nextPage() {
+    if (isLoading.value || items.isEmpty) {
+      return;
+    }
+
     currentPage.value++;
     fetchItems();
   }
 
   void previousPage() {
+    if (isLoading.value) {
+      return;
+    }
     if (currentPage.value > 1) {
       currentPage.value--;
       fetchItems();

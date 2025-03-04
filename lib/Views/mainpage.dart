@@ -113,7 +113,7 @@ class Mainpage extends StatelessWidget {
 
                   return DropdownButtonFormField<int>(
                     decoration: InputDecoration(
-                      labelText: 'Category',
+                      labelText: 'Categories',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -141,7 +141,9 @@ class Mainpage extends StatelessWidget {
           Expanded(
             child: Obx(() {
               if (_mainpageController.items.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                    child: Text("No Items found.",
+                        style: TextStyle(fontSize: 16)));
               }
 
               return ListView.builder(
@@ -152,12 +154,7 @@ class Mainpage extends StatelessWidget {
                       TextEditingController();
 
                   // Construct the full image URL if available
-                  String imageUrl = item.imageUrl != null &&
-                          item.imageUrl!.isNotEmpty
-                      ? item.imageUrl!.replaceFirst('http://127.0.0.1:8000',
-                          'http://192.168.1.9:8000' // Use your Wi-Fi adapter's IP
-                          )
-                      : 'fallback_url';
+
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 8.0),
                     shape: RoundedRectangleBorder(
@@ -235,21 +232,6 @@ class Mainpage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: CachedNetworkImage(
-                            imageUrl: imageUrl,
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) {
-                              print(
-                                  "Image load error: $error"); // Check console logs
-                              return Icon(Icons.error);
-                            },
-                          )),
                     ),
                   );
                 },
