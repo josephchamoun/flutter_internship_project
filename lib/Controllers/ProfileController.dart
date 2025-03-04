@@ -148,10 +148,11 @@ class ProfileController extends GetxController {
           );
 
       if (delete.statusCode == 200 && delete.data != null) {
-        if (delete.data['success'] == true) {
+        if (delete.data['message'] == "User deleted successfully") {
           ShowSuccessDialog(
               Get.context!, "Success", "Order Deleted Successfully", () {
-            // Refresh the orders list after deletion
+            prefs.remove('token');
+
             Get.offAllNamed('/login');
           });
         } else {

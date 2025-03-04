@@ -146,7 +146,22 @@ class Profile extends StatelessWidget {
                           style: TextStyle(color: Colors.redAccent)),
                       SizedBox(height: 12),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.defaultDialog(
+                            title: "Confirm Deletion",
+                            middleText:
+                                "Are you sure you want to delete your account?",
+                            textConfirm: "Yes",
+                            textCancel: "No",
+                            confirmTextColor: Colors.white,
+                            buttonColor: Colors.red,
+                            onConfirm: () {
+                              _profileController.deleteUser();
+
+                              Get.back(); // Close the dialog
+                            },
+                          );
+                        },
                         child: Text("Delete Account"),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red),

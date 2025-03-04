@@ -78,11 +78,12 @@ class LoginController extends GetxController {
           ShowSuccessDialog(Get.context!, "Failed", "User Login Failed", () {});
         }
       } else {
-        ShowSuccessDialog(Get.context!, "Failed", "User Login Failed", () {});
+        ShowSuccessDialog(
+            Get.context!, "Failed", "Wrong email or password", () {});
       }
     } catch (e) {
-      ShowSuccessDialog(Get.context!, "Error",
-          "Something went wrong. Please try again.", () {});
+      ShowSuccessDialog(
+          Get.context!, "Error", "Wrong email or password", () {});
     }
   }
 }

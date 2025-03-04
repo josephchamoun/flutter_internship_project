@@ -113,7 +113,7 @@ class Mainpage extends StatelessWidget {
 
                   return DropdownButtonFormField<int>(
                     decoration: InputDecoration(
-                      labelText: 'Select Category',
+                      labelText: 'Category',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),

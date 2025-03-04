@@ -24,16 +24,12 @@ class RegistrationController extends GetxController {
       Get.snackbar("Error", "Please enter a valid email.");
     } else if (passwordValue.isEmpty) {
       Get.snackbar("Error", "Please enter your password.");
+    } else if (passwordValue.length < 8) {
+      Get.snackbar("Error", "Password must be at least 8 characters long");
     } else if (passwordValue != passwordConfirmationValue) {
       Get.snackbar("Error", "Passwords do not match.");
     } else {
-
-
       register();
-
-
-
-
     }
   }
 
@@ -46,6 +42,7 @@ class RegistrationController extends GetxController {
     password_confirmation.dispose();
     super.onClose();
   }
+
   void register() async {
     try {
       User user = User(
@@ -57,21 +54,26 @@ class RegistrationController extends GetxController {
 
       String requestBody = user.toJson();
 
-      var post = await Dioclient().getInstance().post('/register/apiregister', data: requestBody);
+      var post = await Dioclient()
+          .getInstance()
+          .post('/register/apiregister', data: requestBody);
 
       if (post.statusCode == 200) {
         if (post.data != null && post.data['success'] == true) {
-          ShowSuccessDialog(Get.context!, "Success", "User Registered Successfully", () {});
+          ShowSuccessDialog(
+              Get.context!, "Success", "User Registered Successfully", () {});
         } else {
-          ShowSuccessDialog(Get.context!, "Error", post.data?['message'] ?? "User Registration Failed", () {});
+          ShowSuccessDialog(Get.context!, "Error",
+              post.data?['message'] ?? "User Registration Failed", () {});
         }
       } else {
-        ShowSuccessDialog(Get.context!, "Error", "User Registration Failed", () {});
+        ShowSuccessDialog(
+            Get.context!, "Error", "User Registration Failed", () {});
       }
     } catch (e) {
       // Catch any exceptions and display a failure message
-      ShowSuccessDialog(Get.context!, "Error", "Something went wrong. Please try again.", () {});
+      ShowSuccessDialog(Get.context!, "Error",
+          "Something went wrong. Please try again.", () {});
     }
   }
-
 }
