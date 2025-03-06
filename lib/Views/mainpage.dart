@@ -288,7 +288,7 @@ class Mainpage extends StatelessWidget {
               Get.offAllNamed('/myorders'); // 📦 Navigate to MyOrders
               break;
             case 2:
-              Get.offAllNamed('/cart'); // 🛒 Navigate to Cart
+              Get.offAllNamed('/contact'); // 🛒 Navigate to Contact
               break;
             case 3:
               Get.offAllNamed('/about'); // ℹ️ Navigate to About

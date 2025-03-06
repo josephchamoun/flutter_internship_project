@@ -6,6 +6,7 @@ import 'package:internship_mobile_project/Views/RegistrationForm.dart';
 import 'package:get/get.dart';
 import 'package:internship_mobile_project/Routes/AppRoute.dart';
 import 'package:internship_mobile_project/Views/about.dart';
+import 'package:internship_mobile_project/Views/contact.dart';
 import 'package:internship_mobile_project/Views/myorders.dart';
 import 'package:internship_mobile_project/Views/myordersdetails.dart';
 import 'package:internship_mobile_project/Views/profile.dart';
@@ -42,6 +43,10 @@ class AppPage {
     GetPage(
       name: AppRoute.about,
       page: () => About(),
+    ),
+    GetPage(
+      name: AppRoute.contact,
+      page: () => Contact(),
     )
   ];
 }
