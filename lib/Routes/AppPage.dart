@@ -46,7 +46,7 @@ class AppPage {
     ),
     GetPage(
       name: AppRoute.contact,
-      page: () => Contact(),
+      page: () => ContactPage(),
     )
   ];
 }

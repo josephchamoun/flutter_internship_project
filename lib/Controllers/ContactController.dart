@@ -1,130 +1,194 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:internship_mobile_project/Models/Messages.dart';
-import 'package:internship_mobile_project/Views/contact.dart' as contact_view;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import '../Models/Messages.dart';
+import '../Models/Contact.dart';
 import '../Core/Network/DioClient.dart';
 import '../Core/ShowSuccessDialog.dart';
-import '../Models/User.dart';
-import '../Models/Contact.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ContactController extends GetxController {
   TextEditingController subject = TextEditingController();
   TextEditingController message = TextEditingController();
+
   var isLoading = false.obs;
-  var contact = <Contact>[].obs;
+  var contact = Rxn<ContactModel>();
+  var hasError = false.obs;
+  var errorMessage = ''.obs;
+
   final baseUrl = 'http://127.0.0.1:8000/api/contact/info';
   late SharedPreferences prefs;
+  bool _prefsInitialized = false;
+
   @override
   void onInit() {
     super.onInit();
-    _loadPrefs();
+    _initPrefs();
   }
 
-  void _loadPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('token') != null) {
-      Get.offAllNamed('/login');
+  @override
+  void onClose() {
+    // Clean up controllers
+    subject.dispose();
+    message.dispose();
+    super.onClose();
+  }
+
+  Future<void> _initPrefs() async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+      _prefsInitialized = true;
+
+      // Check token on init
+      final token = prefs.getString('token');
+      if (token == null) {
+        Get.offAllNamed('/login');
+      }
+    } catch (e) {
+      print("Error initializing preferences: $e");
+      hasError.value = true;
+      errorMessage.value = "Failed to initialize app data";
     }
   }
 
-  void fetchContacts() async {
+  Future<void> fetchContacts() async {
+    if (isLoading.value) return; // Prevent multiple concurrent calls
+
     try {
+      // Ensure prefs are initialized
+      if (!_prefsInitialized) {
+        await _initPrefs();
+      }
+
       isLoading.value = true;
-      prefs = await SharedPreferences.getInstance(); // Ensure prefs is loaded
+      hasError.value = false;
+
       final token = prefs.getString('token');
       if (token == null) {
         Get.offAllNamed('/login');
         return;
       }
 
+      // Use a better timeout
       final response = await http.get(
-        Uri.parse('$baseUrl'),
+        Uri.parse(baseUrl),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-      );
+      ).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException("Connection timed out");
+      });
 
       if (response.statusCode == 200) {
-        var jsonData = json.decode(response.body);
-        var contactlist = jsonData['data'] as List;
-        contact.value =
-            contactlist.map((category) => Contact.fromJson(category)).toList();
+        final jsonData = json.decode(response.body);
+        if (jsonData.containsKey('contact')) {
+          contact.value = ContactModel.fromJson(jsonData['contact']);
+        } else {
+          throw Exception("Invalid response format: 'contact' field missing");
+        }
       } else {
-        Get.snackbar(
-            'Error', 'Failed to fetch contact: ${response.statusCode}');
+        throw Exception(
+            "Server returned ${response.statusCode}: ${response.body}");
       }
     } catch (e) {
-      Get.snackbar('Error', 'Exception: $e');
+      hasError.value = true;
+      errorMessage.value = "Failed to load contact info: $e";
+      print("Error in fetchContacts: $e");
+      Get.snackbar(
+        'Error',
+        'Could not load contact information. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } finally {
       isLoading.value = false;
     }
   }
 
-  void addMessage() async {
+  Future<void> addMessage() async {
+    if (isLoading.value) return; // Prevent multiple concurrent calls
+
     try {
-      final ContactController _contactController =
-          Get.find<ContactController>();
+      isLoading.value = true;
 
-      prefs = await SharedPreferences.getInstance();
-      int? userId = prefs.getInt('user_id'); // Retrieve user ID
-
-      if (userId == null) {
-        Get.snackbar("Error", "User ID not found. Please log in again.");
-        Get.offAllNamed('/login');
-        return;
+      // Ensure prefs are initialized
+      if (!_prefsInitialized) {
+        await _initPrefs();
       }
+
       final token = prefs.getString('token');
-      if (token == null) {
-        Get.snackbar("Error", "Token not found. Please log in again.");
+      final userId = prefs.getInt('user_id');
+
+      if (token == null || userId == null) {
+        Get.snackbar(
+          "Session Expired",
+          "Please log in again to continue",
+          snackPosition: SnackPosition.BOTTOM,
+        );
         Get.offAllNamed('/login');
         return;
       }
 
-      // Create order object
-      Messages messages = Messages(
-        user: userId, // Use the retrieved user ID
-        subject: _contactController.subject.text,
-        message: _contactController.message.text,
+      // Create message object
+      final messageData = Messages(
+        user: userId,
+        subject: subject.text.trim(),
+        message: message.text.trim(),
       );
 
-      // Convert to JSON
-      String requestBody = json.encode(messages.toJson());
-
-      var response = await Dioclient().getInstance().post(
+      // Send the request
+      final response = await Dioclient()
+          .getInstance()
+          .post(
             '/messages/postmessage',
-            data: requestBody,
+            data: json.encode(messageData.toJson()),
             options: Options(
               headers: {
                 'Authorization': 'Bearer $token',
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
               },
             ),
-          );
+          )
+          .timeout(const Duration(seconds: 15));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        if (response.data != null && response.data['success'] == true) {
-          ShowSuccessDialog(
-              Get.context!, "Success", "Order Placed Successfully", () {});
-          Get.offAllNamed('/contact');
-        } else {
-          ShowSuccessDialog(
-              Get.context!, "Failed", "Order Placement Failed", () {});
-        }
-      } else {
+        // Clear the form on success
+        subject.clear();
+        message.clear();
+
         ShowSuccessDialog(
-            Get.context!, "Failed", "Order Placement Failed", () {});
+          Get.context!,
+          "Success",
+          "Your message has been sent successfully",
+          () {
+            // Optional: Refresh the page or perform other actions
+          },
+        );
+      } else {
+        throw Exception("Server returned ${response.statusCode}");
       }
     } catch (e) {
-      ShowSuccessDialog(Get.context!, "Error",
-          "Something went wrong. Please try again.", () {});
+      print("Error in addMessage: $e");
+      ShowSuccessDialog(
+        Get.context!,
+        "Error",
+        "Failed to send message. Please try again later.",
+        () {},
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
+}
+
+// Custom exception for timeouts
+class TimeoutException implements Exception {
+  final String message;
+  TimeoutException(this.message);
+  @override
+  String toString() => message;
 }

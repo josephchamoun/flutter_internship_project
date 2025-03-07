@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-class Contact {
+class ContactModel {
   final String? email;
   final String? phone;
 
-  Contact({
+  ContactModel({
     this.email,
     this.phone,
   });
 
-  factory Contact.fromJson(Map<String, dynamic> json) {
-    return Contact(
+  factory ContactModel.fromJson(Map<String, dynamic> json) {
+    return ContactModel(
       email: json['email'],
       phone: json['phone'],
     );
