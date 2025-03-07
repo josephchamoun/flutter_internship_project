@@ -10,7 +10,7 @@ import 'cart.dart';
 import 'myorders.dart';
 import 'contact.dart';
 import 'about.dart';
-import 'package:cached_network_image/cached_network_image.dart'; // Add this import
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Mainpage extends StatelessWidget {
   final MainpageController _mainpageController = Get.put(MainpageController());
@@ -18,238 +18,508 @@ class Mainpage extends StatelessWidget {
 
   Widget _buildMainContent() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(
+          16.0, 16.0, 16.0, 8.0), // Reduced bottom padding
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+          // Modern search field with rounded corners and elevation
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
             child: TextField(
               controller: _mainpageController.searchController,
               decoration: InputDecoration(
-                labelText: 'Search',
+                labelText: 'Search Products',
+                hintText: 'What are you looking for?',
+                prefixIcon: const Icon(Icons.search, color: Colors.blue),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(16.0),
+                  borderSide: BorderSide.none,
                 ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 12.0), // Reduced padding
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
+                  icon: const Icon(Icons.clear, color: Colors.grey),
                   onPressed: () {
-                    _mainpageController.searchTerm.value =
-                        _mainpageController.searchController.text;
+                    _mainpageController.searchController.clear();
+                    _mainpageController.searchTerm.value = '';
                     _mainpageController.applyFilters();
                   },
                 ),
               ),
+              onSubmitted: (value) {
+                _mainpageController.searchTerm.value = value;
+                _mainpageController.applyFilters();
+              },
             ),
           ),
-          Row(
-            children: [
-              Expanded(
-                child: Obx(() {
-                  return DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Select Age',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
+
+          const SizedBox(height: 12.0), // Reduced spacing
+
+          // Filter chips instead of dropdowns for better mobile UX
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                // Age Filter
+                Obx(() => Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.0),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 1,
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            icon: const Icon(Icons.expand_more,
+                                color: Colors.blue),
+                            borderRadius: BorderRadius.circular(12.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            hint: const Text('Age Range'),
+                            value: _mainpageController.selectedAge.value.isEmpty
+                                ? null
+                                : _mainpageController.selectedAge.value,
+                            items: [
+                              'All Ages',
+                              '0-3',
+                              '3-6',
+                              '6-9',
+                              '9-12',
+                              '13-17',
+                              '18+'
+                            ].map((String age) {
+                              return DropdownMenuItem<String>(
+                                value: age,
+                                child: Text(age),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              _mainpageController.selectedAge.value = value!;
+                              _mainpageController.applyFilters();
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                    value: _mainpageController.selectedAge.value.isEmpty
-                        ? null
-                        : _mainpageController.selectedAge.value,
-                    items: [
-                      'All Ages',
-                      '0-3',
-                      '3-6',
-                      '6-9',
-                      '9-12',
-                      '13-17',
-                      '18+'
-                    ].map((String age) {
-                      return DropdownMenuItem<String>(
-                        value: age,
-                        child: Text(age),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      _mainpageController.selectedAge.value = value!;
-                      _mainpageController.applyFilters();
-                    },
-                  );
-                }),
-              ),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: Obx(() {
-                  return DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Select Gender',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
+                    )),
+
+                // Gender Filter
+                Obx(() => Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.0),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 1,
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            icon: const Icon(Icons.expand_more,
+                                color: Colors.blue),
+                            borderRadius: BorderRadius.circular(12.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            hint: const Text('Gender'),
+                            value:
+                                _mainpageController.selectedGender.value.isEmpty
+                                    ? null
+                                    : _mainpageController.selectedGender.value,
+                            items:
+                                ['male', 'female', 'both'].map((String gender) {
+                              return DropdownMenuItem<String>(
+                                value: gender,
+                                child: Text(
+                                    gender.substring(0, 1).toUpperCase() +
+                                        gender.substring(1)),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              _mainpageController.selectedGender.value = value!;
+                              _mainpageController.applyFilters();
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                    value: _mainpageController.selectedGender.value.isEmpty
-                        ? null
-                        : _mainpageController.selectedGender.value,
-                    items: ['male', 'female', 'both'].map((String gender) {
-                      return DropdownMenuItem<String>(
-                        value: gender,
-                        child: Text(gender),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      _mainpageController.selectedGender.value = value!;
-                      _mainpageController.applyFilters();
-                    },
-                  );
-                }),
-              ),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: Obx(() {
+                    )),
+
+                // Categories Filter
+                Obx(() {
                   // Create a list of categories including "All Categories"
                   List<Category> categoriesWithAll = [
                     Category(id: -1, name: 'All'),
                     ..._mainpageController.categories
                   ];
 
-                  return DropdownButtonFormField<int>(
-                    decoration: InputDecoration(
-                      labelText: 'Categories',
-                      border: OutlineInputBorder(
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.0),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<int>(
+                          icon:
+                              const Icon(Icons.expand_more, color: Colors.blue),
+                          borderRadius: BorderRadius.circular(12.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          hint: const Text('Categories'),
+                          value: _mainpageController
+                                  .selectedCategory.value.isEmpty
+                              ? null
+                              : int.parse(
+                                  _mainpageController.selectedCategory.value),
+                          items: categoriesWithAll.map((Category category) {
+                            return DropdownMenuItem<int>(
+                              value: category.id,
+                              child: Text(category.name),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            _mainpageController.selectedCategory.value =
+                                value.toString();
+                            _mainpageController.applyFilters();
+                          },
+                        ),
                       ),
                     ),
-                    value: _mainpageController.selectedCategory.value.isEmpty
-                        ? null
-                        : int.parse(_mainpageController.selectedCategory.value),
-                    items: categoriesWithAll.map((Category category) {
-                      return DropdownMenuItem<int>(
-                        value: category.id,
-                        child: Text(category.name),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      _mainpageController.selectedCategory.value =
-                          value.toString();
-                      _mainpageController.applyFilters();
-                    },
                   );
                 }),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: 16.0),
+
+          const SizedBox(height: 12.0), // Reduced spacing
+
+          // Results counter and sort options
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4.0), // Reduced padding
+            child: Obx(() => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${_mainpageController.items.length} Products',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                )),
+          ),
+
+          // Product grid view
           Expanded(
             child: Obx(() {
               if (_mainpageController.items.isEmpty) {
-                return const Center(
-                    child: Text("No Items found.",
-                        style: TextStyle(fontSize: 16)));
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.search_off,
+                          size: 64, color: Colors.grey.shade400),
+                      const SizedBox(height: 12), // Reduced spacing
+                      const Text(
+                        "No items found",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 4), // Reduced spacing
+                      const Text(
+                        "Try adjusting your filters",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               }
 
-              return ListView.builder(
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.7, // Adjusted for better fit
+                  crossAxisSpacing: 8, // Reduced spacing
+                  mainAxisSpacing: 8, // Reduced spacing
+                ),
                 itemCount: _mainpageController.items.length,
                 itemBuilder: (context, index) {
                   Item item = _mainpageController.items[index];
                   TextEditingController quantityController =
                       TextEditingController();
 
-                  // Construct the full image URL if available
-
                   return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    elevation: 2, // Reduced elevation
+                    shadowColor: Colors.grey.withOpacity(0.3),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
+                      borderRadius:
+                          BorderRadius.circular(12.0), // Smaller radius
                     ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(16.0),
-                      title: Text(
-                        item.name ?? 'No Name',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(item.description ?? 'No Description'),
-                          SizedBox(height: 8),
-                          Text("Available Quantity: ${item.quantity ?? 'N/A'}"),
-                          SizedBox(height: 8),
-                          TextField(
-                            controller: quantityController,
-                            decoration: InputDecoration(
-                              labelText: "Enter Quantity",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                            ),
-                            keyboardType: TextInputType.number,
-                          ),
-                          SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed: () {
-                              String enteredQuantity = quantityController.text;
-
-                              if (enteredQuantity.isNotEmpty) {
-                                int quantity = int.parse(enteredQuantity);
-                                if (item.quantity == 0) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          "Item is out of stock. Please check back later."),
-                                    ),
-                                  );
-                                } else if (quantity > 0 &&
-                                    quantity <= item.quantity!) {
-                                  _cartController.addToCart(item, quantity);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          "Invalid quantity. Please enter a value between 1 and ${item.quantity}."),
-                                    ),
-                                  );
-                                }
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text("Please enter a quantity."),
-                                  ),
-                                );
-                              }
-                            },
-                            child: Text("Add to Cart"),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 36),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Placeholder for product image
+                        Container(
+                          height: 100, // Reduced height
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withOpacity(0.1),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12.0),
+                              topRight: Radius.circular(12.0),
                             ),
                           ),
-                        ],
-                      ),
-                      trailing: Text(
-                        "\$${item.price}",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
+                          child: Center(
+                            child: Icon(
+                              Icons.toys,
+                              size: 40, // Smaller icon
+                              color: Colors.blue.shade300,
+                            ),
+                          ),
                         ),
-                      ),
+
+                        Padding(
+                          padding: const EdgeInsets.all(8.0), // Reduced padding
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Product name
+                              Text(
+                                item.name ?? 'No Name',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14, // Smaller font
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+
+                              const SizedBox(height: 2), // Reduced spacing
+
+                              // Price with dollar sign
+                              Text(
+                                "\$${item.price}",
+                                style: TextStyle(
+                                  color: Colors.green.shade700,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16, // Smaller font
+                                ),
+                              ),
+
+                              const SizedBox(height: 2), // Reduced spacing
+
+                              // Availability indicator
+                              Text(
+                                "In stock: ${item.quantity}",
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 10, // Smaller font
+                                ),
+                              ),
+
+                              const SizedBox(height: 4), // Reduced spacing
+
+                              // Row for quantity and add button
+                              Row(
+                                children: [
+                                  // Quantity input field
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height: 32, // Smaller height
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade100,
+                                        borderRadius: BorderRadius.circular(
+                                            6.0), // Smaller radius
+                                      ),
+                                      child: TextField(
+                                        controller: quantityController,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontSize: 12), // Smaller font
+                                        decoration: const InputDecoration(
+                                          hintText: "Qty",
+                                          hintStyle: TextStyle(
+                                              fontSize: 12), // Smaller font
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 4,
+                                            vertical: 0,
+                                          ),
+                                        ),
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 4), // Small spacing
+
+                                  // Add to cart button
+                                  Expanded(
+                                    flex: 3,
+                                    child: SizedBox(
+                                      height: 32, // Smaller height
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          String enteredQuantity =
+                                              quantityController.text;
+
+                                          if (enteredQuantity.isNotEmpty) {
+                                            int quantity =
+                                                int.parse(enteredQuantity);
+                                            if (item.quantity == 0) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    "Out of stock",
+                                                  ),
+                                                ),
+                                              );
+                                            } else if (quantity > 0 &&
+                                                quantity <= item.quantity!) {
+                                              _cartController.addToCart(
+                                                  item, quantity);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    "${quantity}x ${item.name} added",
+                                                  ),
+                                                  backgroundColor: Colors.green,
+                                                ),
+                                              );
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    "Enter 1-${item.quantity}",
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text("Enter quantity"),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                6.0), // Smaller radius
+                                          ),
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                        child: const Text(
+                                          "Add",
+                                          style: TextStyle(
+                                              fontSize: 12), // Smaller font
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },
               );
             }),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: _mainpageController.previousPage,
-                child: const Text("Previous"),
-              ),
-              ElevatedButton(
-                onPressed: _mainpageController.nextPage,
-                child: const Text("Next"),
-              ),
-            ],
+
+          // Pagination buttons with modern design
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0), // Reduced padding
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: _mainpageController.previousPage,
+                  icon: const Icon(Icons.arrow_back_ios,
+                      size: 14), // Smaller icon
+                  label: const Text("Prev",
+                      style: TextStyle(fontSize: 12)), // Smaller text
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.blue,
+                    side: const BorderSide(color: Colors.blue),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(6.0), // Smaller radius
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 0), // Reduced padding
+                    minimumSize: const Size(80, 32), // Smaller button
+                  ),
+                ),
+                OutlinedButton.icon(
+                  onPressed: _mainpageController.nextPage,
+                  icon: const Icon(Icons.arrow_forward_ios,
+                      size: 14), // Smaller icon
+                  label: const Text("Next",
+                      style: TextStyle(fontSize: 12)), // Smaller text
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.blue,
+                    side: const BorderSide(color: Colors.blue),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(6.0), // Smaller radius
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 0), // Reduced padding
+                    minimumSize: const Size(80, 32), // Smaller button
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -260,13 +530,45 @@ class Mainpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Epic Toy Store"),
+        title: const Text(
+          "Epic Toy Store",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              Get.to(() => CartView());
-            },
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Get.to(() => CartView());
+                },
+              ),
+              Obx(() => Positioned(
+                    top: 8,
+                    right: 8,
+                    child: _cartController.cartItems.isEmpty
+                        ? const SizedBox()
+                        : Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              _cartController.cartItems.length.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                  )),
+            ],
           ),
           IconButton(
             icon: const Icon(Icons.person),
@@ -276,7 +578,13 @@ class Mainpage extends StatelessWidget {
           ),
         ],
       ),
-      body: _buildMainContent(),
+      body: Container(
+        color: Colors.grey.shade50,
+        child: SafeArea(
+          // Added SafeArea to prevent overflow
+          child: _buildMainContent(),
+        ),
+      ),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _mainpageController.selectedIndex.value,
         onTap: (index) {
