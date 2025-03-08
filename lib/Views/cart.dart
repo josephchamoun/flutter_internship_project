@@ -13,132 +13,371 @@ class CartView extends StatelessWidget {
         Get.put(MyOrdersController());
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Shopping Cart'),
-        backgroundColor: Colors.teal,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(() {
-              if (_cartController.cartItems.isEmpty) {
-                return Center(
-                    child: Text('Your cart is empty',
-                        style: TextStyle(fontSize: 18, color: Colors.grey)));
-              } else {
-                return ListView.builder(
-                  itemCount: _cartController.cartItems.length,
-                  itemBuilder: (context, index) {
-                    final item = _cartController.cartItems[index];
-                    // Make totalAmount a reactive value.
-                    RxDouble totalAmount =
-                        (item.price! * item.quantityInCart!).obs;
-
-                    final TextEditingController quantityController =
-                        TextEditingController(
-                            text: item.quantityInCart.toString());
-
-                    return Card(
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              Theme.of(context).colorScheme.inversePrimary.withOpacity(0.2),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Custom App Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 16.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 28,
                       ),
-                      child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        title: Text(item.name ?? 'Unnamed Item',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.remove, color: Colors.teal),
-                              onPressed: () {
-                                if (item.quantityInCart != null &&
-                                    item.quantityInCart! > 1) {
-                                  item.quantityInCart =
-                                      item.quantityInCart! - 1;
-                                  quantityController.text =
-                                      item.quantityInCart.toString();
-                                  totalAmount.value =
-                                      item.price! * item.quantityInCart!;
-                                  _cartController.calculateTotalAmount();
-                                }
-                              },
+                      onPressed: () {
+                        Get.back();
+                      },
+                    ),
+                    const Spacer(),
+                    Text(
+                      'My Cart',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    const Spacer(),
+                    const SizedBox(width: 48), // Balance the back button
+                  ],
+                ),
+              ),
+
+              // Cart Items
+              Expanded(
+                child: Obx(() {
+                  if (_cartController.cartItems.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.shopping_cart_outlined,
+                            size: 80,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Your cart is empty',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[600],
                             ),
-                            SizedBox(
-                              width: 50,
-                              child: TextField(
-                                controller: quantityController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                ),
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                readOnly: true,
-                              ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Add items to get started',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[500],
                             ),
-                            IconButton(
-                              icon: Icon(Icons.add, color: Colors.teal),
-                              onPressed: () {
-                                if (item.quantityInCart! < item.quantity!) {
-                                  item.quantityInCart =
-                                      item.quantityInCart! + 1;
-                                  quantityController.text =
-                                      item.quantityInCart.toString();
-                                  totalAmount.value =
-                                      item.price! * item.quantityInCart!;
-                                  _cartController.calculateTotalAmount();
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                        trailing: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Obx(() {
-                              return Text(
-                                  '\$${totalAmount.value.toStringAsFixed(2)}',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold));
-                            }),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                _cartController.removeItem(item);
-                              },
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
-                  },
-                );
-              }
-            }),
-          ),
-          Obx(() {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Total Amount: \$${_cartController.totalAmount.value.toStringAsFixed(2)}',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  } else {
+                    return ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: _cartController.cartItems.length,
+                      itemBuilder: (context, index) {
+                        final item = _cartController.cartItems[index];
+                        // Make totalAmount a reactive value.
+                        RxDouble totalAmount =
+                            (item.price! * item.quantityInCart!).obs;
+
+                        final TextEditingController quantityController =
+                            TextEditingController(
+                                text: item.quantityInCart.toString());
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 0,
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // Item name and price
+                                Expanded(
+                                  flex: 5,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.name ?? 'Unnamed Item',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '\$${item.price!.toStringAsFixed(2)} each',
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Obx(() {
+                                        return Text(
+                                          'Total: \$${totalAmount.value.toStringAsFixed(2)}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                        );
+                                      }),
+                                    ],
+                                  ),
+                                ),
+
+                                // Quantity controls
+                                Expanded(
+                                  flex: 5,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      // Decrease button
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.remove,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            size: 20,
+                                          ),
+                                          onPressed: () {
+                                            if (item.quantityInCart != null &&
+                                                item.quantityInCart! > 1) {
+                                              item.quantityInCart =
+                                                  item.quantityInCart! - 1;
+                                              quantityController.text = item
+                                                  .quantityInCart
+                                                  .toString();
+                                              totalAmount.value = item.price! *
+                                                  item.quantityInCart!;
+                                              _cartController
+                                                  .calculateTotalAmount();
+                                            }
+                                          },
+                                          constraints: const BoxConstraints(
+                                            minWidth: 36,
+                                            minHeight: 36,
+                                          ),
+                                        ),
+                                      ),
+
+                                      // Quantity display
+                                      Container(
+                                        width: 50,
+                                        height: 36,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: Colors.grey.shade200,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            item.quantityInCart.toString(),
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      // Increase button
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.add,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            size: 20,
+                                          ),
+                                          onPressed: () {
+                                            if (item.quantityInCart! <
+                                                item.quantity!) {
+                                              item.quantityInCart =
+                                                  item.quantityInCart! + 1;
+                                              quantityController.text = item
+                                                  .quantityInCart
+                                                  .toString();
+                                              totalAmount.value = item.price! *
+                                                  item.quantityInCart!;
+                                              _cartController
+                                                  .calculateTotalAmount();
+                                            }
+                                          },
+                                          constraints: const BoxConstraints(
+                                            minWidth: 36,
+                                            minHeight: 36,
+                                          ),
+                                        ),
+                                      ),
+
+                                      // Delete button
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.delete_outline,
+                                          color: Colors.red,
+                                          size: 24,
+                                        ),
+                                        onPressed: () {
+                                          _cartController.removeItem(item);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                }),
               ),
-            );
-          }),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _myordersController.addOrder(_cartController.cartItems);
-        },
-        child: Icon(Icons.shopping_cart_checkout),
-        backgroundColor: Colors.teal,
+
+              // Order summary and checkout button
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 0,
+                      blurRadius: 10,
+                      offset: const Offset(0, -4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Total Amount:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Obx(() {
+                          return Text(
+                            '\$${_cartController.totalAmount.value.toStringAsFixed(2)}',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _myordersController
+                              .addOrder(_cartController.cartItems);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          foregroundColor: Colors.white,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.shopping_cart_checkout),
+                            SizedBox(width: 12),
+                            Text(
+                              'Checkout',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
