@@ -97,13 +97,6 @@ class CartView extends StatelessWidget {
                       itemCount: _cartController.cartItems.length,
                       itemBuilder: (context, index) {
                         final item = _cartController.cartItems[index];
-                        // Make totalAmount a reactive value.
-                        RxDouble totalAmount =
-                            (item.price! * item.quantityInCart!).obs;
-
-                        final TextEditingController quantityController =
-                            TextEditingController(
-                                text: item.quantityInCart.toString());
 
                         return Container(
                           margin: const EdgeInsets.only(bottom: 16),
@@ -147,18 +140,16 @@ class CartView extends StatelessWidget {
                                         ),
                                       ),
                                       const SizedBox(height: 12),
-                                      Obx(() {
-                                        return Text(
-                                          'Total: \$${totalAmount.value.toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                        );
-                                      }),
+                                      Text(
+                                        'Total: \$${(item.price! * item.quantityInCart!).toStringAsFixed(2)}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -190,15 +181,8 @@ class CartView extends StatelessWidget {
                                           onPressed: () {
                                             if (item.quantityInCart != null &&
                                                 item.quantityInCart! > 1) {
-                                              item.quantityInCart =
-                                                  item.quantityInCart! - 1;
-                                              quantityController.text = item
-                                                  .quantityInCart
-                                                  .toString();
-                                              totalAmount.value = item.price! *
-                                                  item.quantityInCart!;
-                                              _cartController
-                                                  .calculateTotalAmount();
+                                              _cartController.editQuantity(item,
+                                                  item.quantityInCart! - 1);
                                             }
                                           },
                                           constraints: const BoxConstraints(
@@ -208,7 +192,7 @@ class CartView extends StatelessWidget {
                                         ),
                                       ),
 
-                                      // Quantity display
+                                      // Quantity display - Using Obx here to reactively update
                                       Container(
                                         width: 50,
                                         height: 36,
@@ -223,13 +207,21 @@ class CartView extends StatelessWidget {
                                           ),
                                         ),
                                         child: Center(
-                                          child: Text(
-                                            item.quantityInCart.toString(),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                          ),
+                                          child: Obx(() {
+                                            // Re-fetch the item to ensure we're getting the latest values
+                                            final updatedItem = _cartController
+                                                .cartItems
+                                                .firstWhere(
+                                                    (i) => i.name == item.name);
+                                            return Text(
+                                              updatedItem.quantityInCart
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            );
+                                          }),
                                         ),
                                       ),
 
@@ -254,15 +246,8 @@ class CartView extends StatelessWidget {
                                           onPressed: () {
                                             if (item.quantityInCart! <
                                                 item.quantity!) {
-                                              item.quantityInCart =
-                                                  item.quantityInCart! + 1;
-                                              quantityController.text = item
-                                                  .quantityInCart
-                                                  .toString();
-                                              totalAmount.value = item.price! *
-                                                  item.quantityInCart!;
-                                              _cartController
-                                                  .calculateTotalAmount();
+                                              _cartController.editQuantity(item,
+                                                  item.quantityInCart! + 1);
                                             }
                                           },
                                           constraints: const BoxConstraints(

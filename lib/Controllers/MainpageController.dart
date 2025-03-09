@@ -42,6 +42,9 @@ class MainpageController extends GetxController {
       if (selectedAge.value == 'All Ages') {
         selectedAge.value = '';
       }
+      if (selectedGender.value == 'Both') {
+        selectedGender.value = '';
+      }
 
       if (selectedCategory.value == 'All' || selectedCategory.value == '-1') {
         selectedCategory.value = '';

@@ -40,7 +40,7 @@ class Mainpage extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: 'Search Products',
                 hintText: 'What are you looking for?',
-                prefixIcon: const Icon(Icons.search, color: Colors.blue),
+                prefixIcon: const Icon(Icons.search, color: Colors.purple),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16.0),
                   borderSide: BorderSide.none,
@@ -91,7 +91,7 @@ class Mainpage extends StatelessWidget {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             icon: const Icon(Icons.expand_more,
-                                color: Colors.blue),
+                                color: Colors.purple),
                             borderRadius: BorderRadius.circular(12.0),
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 12.0),
@@ -141,7 +141,7 @@ class Mainpage extends StatelessWidget {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             icon: const Icon(Icons.expand_more,
-                                color: Colors.blue),
+                                color: Colors.purple),
                             borderRadius: BorderRadius.circular(12.0),
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 12.0),
@@ -193,8 +193,8 @@ class Mainpage extends StatelessWidget {
                       ),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<int>(
-                          icon:
-                              const Icon(Icons.expand_more, color: Colors.blue),
+                          icon: const Icon(Icons.expand_more,
+                              color: Colors.purple),
                           borderRadius: BorderRadius.circular(12.0),
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           hint: const Text('Categories'),
@@ -277,9 +277,9 @@ class Mainpage extends StatelessWidget {
               return GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.7, // Adjusted for better fit
-                  crossAxisSpacing: 8, // Reduced spacing
-                  mainAxisSpacing: 8, // Reduced spacing
+                  childAspectRatio: 0.65, // Made more narrow to appear smaller
+                  crossAxisSpacing: 6, // Reduced spacing further
+                  mainAxisSpacing: 6, // Reduced spacing further
                 ),
                 itemCount: _mainpageController.items.length,
                 itemBuilder: (context, index) {
@@ -288,36 +288,37 @@ class Mainpage extends StatelessWidget {
                       TextEditingController();
 
                   return Card(
-                    elevation: 2, // Reduced elevation
-                    shadowColor: Colors.grey.withOpacity(0.3),
+                    elevation: 1, // Reduced elevation further
+                    shadowColor: Colors.grey.withOpacity(0.2),
                     shape: RoundedRectangleBorder(
                       borderRadius:
-                          BorderRadius.circular(12.0), // Smaller radius
+                          BorderRadius.circular(10.0), // Smaller radius
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Placeholder for product image
                         Container(
-                          height: 100, // Reduced height
+                          height: 90, // Further reduced height
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.1),
+                            color: Colors.purple.withOpacity(0.1),
                             borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12.0),
-                              topRight: Radius.circular(12.0),
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0),
                             ),
                           ),
                           child: Center(
                             child: Icon(
                               Icons.toys,
-                              size: 40, // Smaller icon
-                              color: Colors.blue.shade300,
+                              size: 36, // Smaller icon
+                              color: Colors.purple.shade300,
                             ),
                           ),
                         ),
 
                         Padding(
-                          padding: const EdgeInsets.all(8.0), // Reduced padding
+                          padding: const EdgeInsets.all(
+                              6.0), // Further reduced padding
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -326,7 +327,7 @@ class Mainpage extends StatelessWidget {
                                 item.name ?? 'No Name',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14, // Smaller font
+                                  fontSize: 12, // Smaller font
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -338,24 +339,25 @@ class Mainpage extends StatelessWidget {
                               Text(
                                 "\$${item.price}",
                                 style: TextStyle(
-                                  color: Colors.green.shade700,
+                                  color: Colors.purple.shade700,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16, // Smaller font
+                                  fontSize: 14, // Smaller font
                                 ),
                               ),
 
-                              const SizedBox(height: 2), // Reduced spacing
+                              const SizedBox(
+                                  height: 1), // Further reduced spacing
 
                               // Availability indicator
                               Text(
                                 "In stock: ${item.quantity}",
                                 style: TextStyle(
                                   color: Colors.grey.shade600,
-                                  fontSize: 10, // Smaller font
+                                  fontSize: 9, // Smaller font
                                 ),
                               ),
 
-                              const SizedBox(height: 4), // Reduced spacing
+                              const SizedBox(height: 3), // Reduced spacing
 
                               // Row for quantity and add button
                               Row(
@@ -364,24 +366,24 @@ class Mainpage extends StatelessWidget {
                                   Expanded(
                                     flex: 2,
                                     child: Container(
-                                      height: 32, // Smaller height
+                                      height: 28, // Smaller height
                                       decoration: BoxDecoration(
                                         color: Colors.grey.shade100,
                                         borderRadius: BorderRadius.circular(
-                                            6.0), // Smaller radius
+                                            5.0), // Smaller radius
                                       ),
                                       child: TextField(
                                         controller: quantityController,
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
-                                            fontSize: 12), // Smaller font
+                                            fontSize: 11), // Smaller font
                                         decoration: const InputDecoration(
                                           hintText: "Qty",
                                           hintStyle: TextStyle(
-                                              fontSize: 12), // Smaller font
+                                              fontSize: 11), // Smaller font
                                           border: InputBorder.none,
                                           contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 4,
+                                            horizontal: 2,
                                             vertical: 0,
                                           ),
                                         ),
@@ -390,13 +392,13 @@ class Mainpage extends StatelessWidget {
                                     ),
                                   ),
 
-                                  const SizedBox(width: 4), // Small spacing
+                                  const SizedBox(width: 3), // Small spacing
 
                                   // Add to cart button
                                   Expanded(
                                     flex: 3,
                                     child: SizedBox(
-                                      height: 32, // Smaller height
+                                      height: 28, // Smaller height
                                       child: ElevatedButton(
                                         onPressed: () {
                                           String enteredQuantity =
@@ -424,7 +426,8 @@ class Mainpage extends StatelessWidget {
                                                   content: Text(
                                                     "${quantity}x ${item.name} added",
                                                   ),
-                                                  backgroundColor: Colors.green,
+                                                  backgroundColor:
+                                                      Colors.purple,
                                                 ),
                                               );
                                             } else {
@@ -447,18 +450,18 @@ class Mainpage extends StatelessWidget {
                                           }
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.blue,
+                                          backgroundColor: Colors.purple,
                                           foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
-                                                6.0), // Smaller radius
+                                                5.0), // Smaller radius
                                           ),
                                           padding: EdgeInsets.zero,
                                         ),
                                         child: const Text(
                                           "Add",
                                           style: TextStyle(
-                                              fontSize: 12), // Smaller font
+                                              fontSize: 11), // Smaller font
                                         ),
                                       ),
                                     ),
@@ -489,8 +492,8 @@ class Mainpage extends StatelessWidget {
                   label: const Text("Prev",
                       style: TextStyle(fontSize: 12)), // Smaller text
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.blue,
-                    side: const BorderSide(color: Colors.blue),
+                    foregroundColor: Colors.purple,
+                    side: const BorderSide(color: Colors.purple),
                     shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(6.0), // Smaller radius
@@ -507,8 +510,8 @@ class Mainpage extends StatelessWidget {
                   label: const Text("Next",
                       style: TextStyle(fontSize: 12)), // Smaller text
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.blue,
-                    side: const BorderSide(color: Colors.blue),
+                    foregroundColor: Colors.purple,
+                    side: const BorderSide(color: Colors.purple),
                     shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(6.0), // Smaller radius
@@ -535,7 +538,7 @@ class Mainpage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 0,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
         actions: [
           Stack(
