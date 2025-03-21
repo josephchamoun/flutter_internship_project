@@ -51,7 +51,7 @@ class MainpageController extends GetxController {
       }
       final response = await http.get(
         Uri.parse(
-            'http://127.0.0.1:8000/api/dashboard?search=${searchTerm.value}&age=${selectedAge.value}&gender=${selectedGender.value}&category=${selectedCategory.value}&page=${currentPage.value}'),
+            'https://d499-94-72-152-229.ngrok-free.app/api/dashboard?search=${searchTerm.value}&age=${selectedAge.value}&gender=${selectedGender.value}&category=${selectedCategory.value}&page=${currentPage.value}'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -83,7 +83,7 @@ class MainpageController extends GetxController {
     try {
       final token = prefs.getString('token');
       final response = await http.get(
-        Uri.parse('http://localhost:8000/api/categories'),
+        Uri.parse('https://d499-94-72-152-229.ngrok-free.app/api/categories'),
         headers: {
           'Authorization': 'Bearer $token',
         },

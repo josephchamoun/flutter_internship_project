@@ -57,7 +57,8 @@ class MyOrdersDetailsController extends GetxController {
 
       print("[DEBUG] Fetching order details for orderId: $orderId");
 
-      baseUrl = 'http://127.0.0.1:8000/api/orders/myorder/details/$orderId';
+      baseUrl =
+          'https://d499-94-72-152-229.ngrok-free.app/api/orders/myorder/details/$orderId';
 
       final response = await http.get(
         Uri.parse(baseUrl),

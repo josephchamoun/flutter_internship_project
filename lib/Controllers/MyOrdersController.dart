@@ -20,7 +20,8 @@ class MyOrdersController extends GetxController {
   var currentPage = 1.obs;
   late SharedPreferences prefs;
 
-  final baseUrl = 'http://127.0.0.1:8000/api/orders/myorders';
+  final baseUrl =
+      'https://d499-94-72-152-229.ngrok-free.app/api/orders/myorders';
 
   @override
   void onInit() {
