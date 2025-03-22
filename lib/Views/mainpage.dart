@@ -16,22 +16,21 @@ class Mainpage extends StatelessWidget {
   final MainpageController _mainpageController = Get.put(MainpageController());
   final CartController _cartController = Get.put(CartController());
 
-  Widget _buildMainContent() {
+  Widget _buildMainContent(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-          16.0, 16.0, 16.0, 8.0), // Reduced bottom padding
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
       child: Column(
         children: [
-          // Modern search field with rounded corners and elevation
+          // Enhanced search field with theme colors
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Theme.of(context).shadowColor.withOpacity(0.15),
                   spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
@@ -40,17 +39,18 @@ class Mainpage extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: 'Search Products',
                 hintText: 'What are you looking for?',
-                prefixIcon: const Icon(Icons.search, color: Colors.purple),
+                prefixIcon: Icon(Icons.search,
+                    color: Theme.of(context).colorScheme.primary),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16.0),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 12.0), // Reduced padding
+                fillColor: Theme.of(context).colorScheme.surface,
+                contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear, color: Colors.grey),
+                  icon: Icon(Icons.clear,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant),
                   onPressed: () {
                     _mainpageController.searchController.clear();
                     _mainpageController.searchTerm.value = '';
@@ -65,23 +65,25 @@ class Mainpage extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 12.0), // Reduced spacing
+          const SizedBox(height: 16.0),
 
-          // Filter chips instead of dropdowns for better mobile UX
+          // Enhanced filter chips with theme colors
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
                 // Age Filter
                 Obx(() => Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
+                      padding: const EdgeInsets.only(right: 10.0),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.0),
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
+                              color: Theme.of(context)
+                                  .shadowColor
+                                  .withOpacity(0.1),
                               spreadRadius: 1,
                               blurRadius: 4,
                               offset: const Offset(0, 2),
@@ -90,8 +92,8 @@ class Mainpage extends StatelessWidget {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            icon: const Icon(Icons.expand_more,
-                                color: Colors.purple),
+                            icon: Icon(Icons.expand_more,
+                                color: Theme.of(context).colorScheme.primary),
                             borderRadius: BorderRadius.circular(12.0),
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 12.0),
@@ -124,14 +126,16 @@ class Mainpage extends StatelessWidget {
 
                 // Gender Filter
                 Obx(() => Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
+                      padding: const EdgeInsets.only(right: 10.0),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.0),
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
+                              color: Theme.of(context)
+                                  .shadowColor
+                                  .withOpacity(0.1),
                               spreadRadius: 1,
                               blurRadius: 4,
                               offset: const Offset(0, 2),
@@ -140,8 +144,8 @@ class Mainpage extends StatelessWidget {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            icon: const Icon(Icons.expand_more,
-                                color: Colors.purple),
+                            icon: Icon(Icons.expand_more,
+                                color: Theme.of(context).colorScheme.primary),
                             borderRadius: BorderRadius.circular(12.0),
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 12.0),
@@ -177,14 +181,15 @@ class Mainpage extends StatelessWidget {
                   ];
 
                   return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
+                    padding: const EdgeInsets.only(right: 10.0),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.0),
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
+                            color:
+                                Theme.of(context).shadowColor.withOpacity(0.1),
                             spreadRadius: 1,
                             blurRadius: 4,
                             offset: const Offset(0, 2),
@@ -193,8 +198,8 @@ class Mainpage extends StatelessWidget {
                       ),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<int>(
-                          icon: const Icon(Icons.expand_more,
-                              color: Colors.purple),
+                          icon: Icon(Icons.expand_more,
+                              color: Theme.of(context).colorScheme.primary),
                           borderRadius: BorderRadius.circular(12.0),
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           hint: const Text('Categories'),
@@ -223,26 +228,26 @@ class Mainpage extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 12.0), // Reduced spacing
+          const SizedBox(height: 16.0),
 
-          // Results counter and sort options
+          // Results counter with theme colors
           Padding(
-            padding: const EdgeInsets.only(bottom: 4.0), // Reduced padding
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: Obx(() => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       '${_mainpageController.items.length} Products',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ],
                 )),
           ),
 
-          // Product grid view
+          // Enhanced product grid view
           Expanded(
             child: Obx(() {
               if (_mainpageController.items.isEmpty) {
@@ -251,22 +256,26 @@ class Mainpage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.search_off,
-                          size: 64, color: Colors.grey.shade400),
-                      const SizedBox(height: 12), // Reduced spacing
-                      const Text(
+                          size: 64,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondary
+                              .withOpacity(0.4)),
+                      const SizedBox(height: 16),
+                      Text(
                         "No items found",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
-                      const SizedBox(height: 4), // Reduced spacing
-                      const Text(
+                      const SizedBox(height: 8),
+                      Text(
                         "Try adjusting your filters",
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -277,9 +286,9 @@ class Mainpage extends StatelessWidget {
               return GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.65, // Made more narrow to appear smaller
-                  crossAxisSpacing: 6, // Reduced spacing further
-                  mainAxisSpacing: 6, // Reduced spacing further
+                  childAspectRatio: 0.65,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
                 ),
                 itemCount: _mainpageController.items.length,
                 itemBuilder: (context, index) {
@@ -288,102 +297,134 @@ class Mainpage extends StatelessWidget {
                       TextEditingController();
 
                   return Card(
-                    elevation: 1, // Reduced elevation further
-                    shadowColor: Colors.grey.withOpacity(0.2),
+                    elevation: 2,
+                    shadowColor: Theme.of(context).shadowColor.withOpacity(0.2),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(10.0), // Smaller radius
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Placeholder for product image
+                        // Product image container with gradient background
                         Container(
-                          height: 90, // Further reduced height
+                          height: 100,
                           decoration: BoxDecoration(
-                            color: Colors.purple.withOpacity(0.1),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(0.1),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary
+                                    .withOpacity(0.2),
+                              ],
+                            ),
                             borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
+                              topLeft: Radius.circular(12.0),
+                              topRight: Radius.circular(12.0),
                             ),
                           ),
                           child: Center(
                             child: Icon(
                               Icons.toys,
-                              size: 36, // Smaller icon
-                              color: Colors.purple.shade300,
+                              size: 42,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ),
 
                         Padding(
-                          padding: const EdgeInsets.all(
-                              6.0), // Further reduced padding
+                          padding: const EdgeInsets.all(10.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // Product name
                               Text(
                                 item.name ?? 'No Name',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12, // Smaller font
+                                  fontSize: 14,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
 
-                              const SizedBox(height: 2), // Reduced spacing
+                              const SizedBox(height: 4),
 
-                              // Price with dollar sign
+                              // Price with enhanced styling
                               Text(
                                 "\$${item.price}",
                                 style: TextStyle(
-                                  color: Colors.purple.shade700,
+                                  color: Theme.of(context).colorScheme.primary,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14, // Smaller font
+                                  fontSize: 16,
                                 ),
                               ),
 
-                              const SizedBox(
-                                  height: 1), // Further reduced spacing
+                              const SizedBox(height: 4),
 
-                              // Availability indicator
-                              Text(
-                                "In stock: ${item.quantity}",
-                                style: TextStyle(
-                                  color: Colors.grey.shade600,
-                                  fontSize: 9, // Smaller font
-                                ),
+                              // Availability indicator with theme colors
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.inventory_2,
+                                    size: 12,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "In stock: ${item.quantity}",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
                               ),
 
-                              const SizedBox(height: 3), // Reduced spacing
+                              const SizedBox(height: 8),
 
                               // Row for quantity and add button
                               Row(
                                 children: [
-                                  // Quantity input field
+                                  // Quantity input field with theme styling
                                   Expanded(
                                     flex: 2,
                                     child: Container(
-                                      height: 28, // Smaller height
+                                      height: 32,
                                       decoration: BoxDecoration(
-                                        color: Colors.grey.shade100,
-                                        borderRadius: BorderRadius.circular(
-                                            5.0), // Smaller radius
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surfaceVariant,
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline
+                                              .withOpacity(0.3),
+                                          width: 1,
+                                        ),
                                       ),
                                       child: TextField(
                                         controller: quantityController,
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontSize: 11), // Smaller font
+                                        style: const TextStyle(fontSize: 12),
                                         decoration: const InputDecoration(
                                           hintText: "Qty",
-                                          hintStyle: TextStyle(
-                                              fontSize: 11), // Smaller font
+                                          hintStyle: TextStyle(fontSize: 12),
                                           border: InputBorder.none,
                                           contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 2,
+                                            horizontal: 4,
                                             vertical: 0,
                                           ),
                                         ),
@@ -392,13 +433,13 @@ class Mainpage extends StatelessWidget {
                                     ),
                                   ),
 
-                                  const SizedBox(width: 3), // Small spacing
+                                  const SizedBox(width: 6),
 
-                                  // Add to cart button
+                                  // Enhanced add to cart button
                                   Expanded(
                                     flex: 3,
                                     child: SizedBox(
-                                      height: 28, // Smaller height
+                                      height: 32,
                                       child: ElevatedButton(
                                         onPressed: () {
                                           String enteredQuantity =
@@ -410,10 +451,13 @@ class Mainpage extends StatelessWidget {
                                             if (item.quantity == 0) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                    "Out of stock",
-                                                  ),
+                                                SnackBar(
+                                                  content: const Text(
+                                                      "Out of stock"),
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .error,
                                                 ),
                                               );
                                             } else if (quantity > 0 &&
@@ -424,10 +468,11 @@ class Mainpage extends StatelessWidget {
                                                   .showSnackBar(
                                                 SnackBar(
                                                   content: Text(
-                                                    "${quantity}x ${item.name} added",
-                                                  ),
+                                                      "${quantity}x ${item.name} added"),
                                                   backgroundColor:
-                                                      Colors.purple,
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
                                                 ),
                                               );
                                             } else {
@@ -435,33 +480,54 @@ class Mainpage extends StatelessWidget {
                                                   .showSnackBar(
                                                 SnackBar(
                                                   content: Text(
-                                                    "Enter 1-${item.quantity}",
-                                                  ),
+                                                      "Enter 1-${item.quantity}"),
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .error,
                                                 ),
                                               );
                                             }
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
-                                              const SnackBar(
-                                                content: Text("Enter quantity"),
+                                              SnackBar(
+                                                content: const Text(
+                                                    "Enter quantity"),
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .error,
                                               ),
                                             );
                                           }
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.purple,
-                                          foregroundColor: Colors.white,
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          foregroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          elevation: 0,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                5.0), // Smaller radius
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
                                           ),
                                           padding: EdgeInsets.zero,
                                         ),
-                                        child: const Text(
-                                          "Add",
-                                          style: TextStyle(
-                                              fontSize: 11), // Smaller font
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.add_shopping_cart,
+                                                size: 12),
+                                            const SizedBox(width: 2),
+                                            const Text(
+                                              "Add",
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -479,46 +545,42 @@ class Mainpage extends StatelessWidget {
             }),
           ),
 
-          // Pagination buttons with modern design
+          // Enhanced pagination buttons
           Padding(
-            padding: const EdgeInsets.only(top: 4.0), // Reduced padding
+            padding: const EdgeInsets.only(top: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 OutlinedButton.icon(
                   onPressed: _mainpageController.previousPage,
-                  icon: const Icon(Icons.arrow_back_ios,
-                      size: 14), // Smaller icon
-                  label: const Text("Prev",
-                      style: TextStyle(fontSize: 12)), // Smaller text
+                  icon: const Icon(Icons.arrow_back_ios, size: 14),
+                  label: const Text("Prev", style: TextStyle(fontSize: 12)),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.purple,
-                    side: const BorderSide(color: Colors.purple),
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(6.0), // Smaller radius
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 0), // Reduced padding
-                    minimumSize: const Size(80, 32), // Smaller button
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                    minimumSize: const Size(90, 36),
                   ),
                 ),
                 OutlinedButton.icon(
                   onPressed: _mainpageController.nextPage,
-                  icon: const Icon(Icons.arrow_forward_ios,
-                      size: 14), // Smaller icon
-                  label: const Text("Next",
-                      style: TextStyle(fontSize: 12)), // Smaller text
+                  icon: const Icon(Icons.arrow_forward_ios, size: 14),
+                  label: const Text("Next", style: TextStyle(fontSize: 12)),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.purple,
-                    side: const BorderSide(color: Colors.purple),
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(6.0), // Smaller radius
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 0), // Reduced padding
-                    minimumSize: const Size(80, 32), // Smaller button
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                    minimumSize: const Size(90, 36),
                   ),
                 ),
               ],
@@ -533,19 +595,22 @@ class Mainpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Epic Toy Store",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
-        elevation: 0,
-        backgroundColor: Colors.purple,
-        foregroundColor: Colors.white,
+        elevation: 2,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           Stack(
             alignment: Alignment.center,
             children: [
               IconButton(
-                icon: const Icon(Icons.shopping_cart),
+                icon: Icon(Icons.shopping_cart,
+                    color: Theme.of(context).colorScheme.onPrimary),
                 onPressed: () {
                   Get.to(() => CartView());
                 },
@@ -557,14 +622,14 @@ class Mainpage extends StatelessWidget {
                         ? const SizedBox()
                         : Container(
                             padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.error,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               _cartController.cartItems.length.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onError,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -574,7 +639,8 @@ class Mainpage extends StatelessWidget {
             ],
           ),
           IconButton(
-            icon: const Icon(Icons.person),
+            icon: Icon(Icons.person,
+                color: Theme.of(context).colorScheme.onPrimary),
             onPressed: () {
               Get.toNamed('/profile');
             },
@@ -582,10 +648,9 @@ class Mainpage extends StatelessWidget {
         ],
       ),
       body: Container(
-        color: Colors.grey.shade50,
+        color: Theme.of(context).colorScheme.background,
         child: SafeArea(
-          // Added SafeArea to prevent overflow
-          child: _buildMainContent(),
+          child: _buildMainContent(context),
         ),
       ),
       bottomNavigationBar: CustomBottomNavBar(
@@ -593,16 +658,16 @@ class Mainpage extends StatelessWidget {
         onTap: (index) {
           switch (index) {
             case 0:
-              Get.offAllNamed('/mainpage'); // 🏠 Navigate to Main Page
+              Get.offAllNamed('/mainpage');
               break;
             case 1:
-              Get.offAllNamed('/myorders'); // 📦 Navigate to MyOrders
+              Get.offAllNamed('/myorders');
               break;
             case 2:
-              Get.offAllNamed('/contact'); // 🛒 Navigate to Contact
+              Get.offAllNamed('/contact');
               break;
             case 3:
-              Get.offAllNamed('/about'); // ℹ️ Navigate to About
+              Get.offAllNamed('/about');
               break;
             default:
               Get.offAllNamed('/mainpage');

@@ -23,7 +23,7 @@ class MyOrders extends StatelessWidget {
             fontSize: 20,
           ),
         ),
-        backgroundColor: Colors.purple.shade600,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 22),
@@ -43,7 +43,10 @@ class MyOrders extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.purple.withOpacity(0.05), Colors.white],
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              Theme.of(context).colorScheme.inversePrimary.withOpacity(0.2),
+            ],
           ),
         ),
         child: Padding(
@@ -54,11 +57,11 @@ class MyOrders extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     vertical: 12.0, horizontal: 16.0),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Theme.of(context).shadowColor.withOpacity(0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 3),
                     ),
@@ -67,14 +70,14 @@ class MyOrders extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(Icons.shopping_bag_outlined,
-                        color: Colors.purple.shade700, size: 24),
+                        color: Theme.of(context).colorScheme.primary, size: 24),
                     const SizedBox(width: 12),
                     Obx(() => Text(
                           "${_myordersController.myorders.length} Orders",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
-                            color: Colors.purple.shade700,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         )),
                   ],
@@ -86,7 +89,7 @@ class MyOrders extends StatelessWidget {
                   if (_myordersController.isLoading.value) {
                     return Center(
                       child: CircularProgressIndicator(
-                        color: Colors.purple.shade600,
+                        color: Theme.of(context).colorScheme.primary,
                         strokeWidth: 3,
                       ),
                     );
@@ -99,15 +102,18 @@ class MyOrders extends StatelessWidget {
                         Icon(
                           Icons.shopping_cart_outlined,
                           size: 64,
-                          color: Colors.grey.shade400,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondary
+                              .withOpacity(0.4),
                         ),
                         const SizedBox(height: 16),
-                        const Text(
+                        Text(
                           "No orders found",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -115,7 +121,8 @@ class MyOrders extends StatelessWidget {
                           "Start shopping to see your orders here",
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey.shade600,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -129,11 +136,13 @@ class MyOrders extends StatelessWidget {
                         duration: Duration(milliseconds: 300),
                         margin: const EdgeInsets.only(bottom: 16.0),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           borderRadius: BorderRadius.circular(16.0),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.15),
+                              color: Theme.of(context)
+                                  .shadowColor
+                                  .withOpacity(0.15),
                               spreadRadius: 1,
                               blurRadius: 8,
                               offset: const Offset(0, 2),
@@ -154,8 +163,14 @@ class MyOrders extends StatelessWidget {
                                       'orderStatus': myorders.status.toString()
                                     });
                               },
-                              splashColor: Colors.purple.withOpacity(0.1),
-                              highlightColor: Colors.purple.withOpacity(0.05),
+                              splashColor: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.1),
+                              highlightColor: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.05),
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
@@ -170,23 +185,30 @@ class MyOrders extends StatelessWidget {
                                             Container(
                                               padding: const EdgeInsets.all(8),
                                               decoration: BoxDecoration(
-                                                color: Colors.purple
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
                                                     .withOpacity(0.1),
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                               ),
                                               child: Icon(
                                                 Icons.receipt_long_outlined,
-                                                color: Colors.purple.shade600,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                                 size: 20,
                                               ),
                                             ),
                                             const SizedBox(width: 12),
                                             Text(
                                               "Order #${myorders.id}",
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
                                               ),
                                             ),
                                           ],
@@ -198,12 +220,16 @@ class MyOrders extends StatelessWidget {
                                                         horizontal: 12,
                                                         vertical: 6),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.purple
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
                                                       .withOpacity(0.15),
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                   border: Border.all(
-                                                    color: Colors.purple
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
                                                         .withOpacity(0.3),
                                                     width: 1,
                                                   ),
@@ -216,15 +242,17 @@ class MyOrders extends StatelessWidget {
                                                       Icons
                                                           .local_shipping_outlined,
                                                       size: 14,
-                                                      color: Colors
-                                                          .purple.shade700,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
                                                     ),
                                                     const SizedBox(width: 4),
                                                     Text(
                                                       "Shipped",
                                                       style: TextStyle(
-                                                        color: Colors
-                                                            .purple.shade700,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
                                                         fontWeight:
                                                             FontWeight.w600,
                                                         fontSize: 12,
@@ -236,7 +264,9 @@ class MyOrders extends StatelessWidget {
                                             : IconButton(
                                                 icon: Icon(
                                                   Icons.delete_outline,
-                                                  color: Colors.red.shade400,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .error,
                                                 ),
                                                 onPressed: () {
                                                   Get.defaultDialog(
@@ -258,10 +288,17 @@ class MyOrders extends StatelessWidget {
                                                     textConfirm: "Delete",
                                                     textCancel: "Cancel",
                                                     confirmTextColor:
-                                                        Colors.white,
-                                                    buttonColor: Colors.red,
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .onError,
+                                                    buttonColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .error,
                                                     cancelTextColor:
-                                                        Colors.grey,
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurfaceVariant,
                                                     barrierDismissible: false,
                                                     onConfirm: () {
                                                       print(
@@ -285,19 +322,24 @@ class MyOrders extends StatelessWidget {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const Text(
+                                            Text(
                                               "Customer",
                                               style: TextStyle(
                                                 fontSize: 12,
-                                                color: Colors.grey,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
                                               ),
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
                                               myorders.user ?? "Unknown User",
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w500,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
                                               ),
                                             ),
                                           ],
@@ -306,11 +348,13 @@ class MyOrders extends StatelessWidget {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
                                           children: [
-                                            const Text(
+                                            Text(
                                               "Amount",
                                               style: TextStyle(
                                                 fontSize: 12,
-                                                color: Colors.grey,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
                                               ),
                                             ),
                                             const SizedBox(height: 4),
@@ -319,7 +363,9 @@ class MyOrders extends StatelessWidget {
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.purple.shade700,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                               ),
                                             ),
                                           ],
@@ -336,14 +382,18 @@ class MyOrders extends StatelessWidget {
                                             Icon(
                                               Icons.calendar_today_outlined,
                                               size: 14,
-                                              color: Colors.grey.shade600,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
                                             ),
                                             const SizedBox(width: 6),
                                             Text(
                                               myorders.updated_at ?? "No Date",
                                               style: TextStyle(
                                                 fontSize: 12,
-                                                color: Colors.grey.shade600,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
                                               ),
                                             ),
                                           ],
@@ -354,23 +404,29 @@ class MyOrders extends StatelessWidget {
                                             vertical: 6,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: Colors.purple.shade600,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                           ),
-                                          child: const Row(
+                                          child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Icon(
                                                 Icons.remove_red_eye_outlined,
                                                 size: 14,
-                                                color: Colors.white,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary,
                                               ),
-                                              SizedBox(width: 4),
+                                              const SizedBox(width: 4),
                                               Text(
                                                 "View Details",
                                                 style: TextStyle(
-                                                  color: Colors.white,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 12,
                                                 ),
@@ -401,8 +457,9 @@ class MyOrders extends StatelessWidget {
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text("Previous"),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple.shade600,
-                        foregroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 12),
                         shape: RoundedRectangleBorder(
@@ -416,8 +473,9 @@ class MyOrders extends StatelessWidget {
                       icon: const Icon(Icons.arrow_forward_ios, size: 16),
                       label: const Text("Next"),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple.shade600,
-                        foregroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 12),
                         shape: RoundedRectangleBorder(

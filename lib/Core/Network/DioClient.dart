@@ -5,7 +5,7 @@ class Dioclient {
   Dio getInstance() {
     Dio dio = Dio(
       BaseOptions(
-          baseUrl: 'https://d499-94-72-152-229.ngrok-free.app/api',
+          baseUrl: 'http://127.0.0.1:8000/api',
           connectTimeout: const Duration(seconds: 5),
           receiveTimeout: const Duration(seconds: 3),
           contentType: Headers.jsonContentType,

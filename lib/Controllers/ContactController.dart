@@ -18,7 +18,7 @@ class ContactController extends GetxController {
   var hasError = false.obs;
   var errorMessage = ''.obs;
 
-  final baseUrl = 'https://d499-94-72-152-229.ngrok-free.app/api/contact/info';
+  final baseUrl = 'http://127.0.0.1:8000/api/contact/info';
   late SharedPreferences prefs;
   bool _prefsInitialized = false;
 

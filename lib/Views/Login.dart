@@ -7,8 +7,6 @@ import '../Controllers/LoginController.dart';
 import '../Routes/AppRoute.dart';
 
 class Login extends GetView<LoginController> {
-  final LoginController _loginController = Get.put(LoginController());
-
   Login({super.key});
 
   @override
@@ -55,89 +53,21 @@ class Login extends GetView<LoginController> {
                     ),
                   ),
                   const SizedBox(height: 50),
-                  Text(
-                    "Email",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
+                  Text("Email", style: _labelStyle(context)),
                   const SizedBox(height: 8),
                   TextField(
-                    controller: _loginController.email,
-                    decoration: InputDecoration(
-                      hintText: 'your.email@example.com',
-                      prefixIcon: Icon(
-                        Icons.email_outlined,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade200,
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
+                    controller: controller.email,
+                    decoration: _inputDecoration(context, Icons.email_outlined,
+                        'your.email@example.com'),
                   ),
                   const SizedBox(height: 24),
-                  Text(
-                    "Password",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
+                  Text("Password", style: _labelStyle(context)),
                   const SizedBox(height: 8),
                   TextField(
                     obscureText: true,
-                    controller: _loginController.password,
-                    decoration: InputDecoration(
-                      hintText: 'Your password',
-                      prefixIcon: Icon(
-                        Icons.lock_outline,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      suffixIcon: Icon(
-                        Icons.visibility_off_outlined,
-                        color: Colors.grey[600],
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade200,
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
+                    controller: controller.password,
+                    decoration: _inputDecoration(
+                        context, Icons.lock_outline, 'Your password'),
                   ),
                   const SizedBox(height: 32),
                   SizedBox(
@@ -145,8 +75,7 @@ class Login extends GetView<LoginController> {
                     height: 55,
                     child: ElevatedButton(
                       onPressed: () {
-                        _loginController.submit();
-                        Get.toNamed('/mainpage');
+                        controller.submit();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -171,10 +100,7 @@ class Login extends GetView<LoginController> {
                     children: [
                       Text(
                         "Don't have an account? ",
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 16,
-                        ),
+                        style: TextStyle(color: Colors.grey[600], fontSize: 16),
                       ),
                       TextButton(
                         onPressed: () {
@@ -199,4 +125,23 @@ class Login extends GetView<LoginController> {
       ),
     );
   }
+
+  TextStyle _labelStyle(BuildContext context) => TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.primary,
+      );
+
+  InputDecoration _inputDecoration(
+          BuildContext context, IconData icon, String hintText) =>
+      InputDecoration(
+        hintText: hintText,
+        prefixIcon: Icon(icon, color: Theme.of(context).colorScheme.primary),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      );
 }
