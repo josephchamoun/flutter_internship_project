@@ -161,7 +161,7 @@ class About extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(
-                          'Meet the Developers',
+                          'About This App',
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -180,8 +180,7 @@ class About extends StatelessWidget {
                             children: [
                               const TextSpan(
                                 text:
-                                    'This app was brought to life by the hard work and dedication of our talented developers. '
-                                    'A special thanks to ',
+                                    'This app was developed as an internship project at XpertBot Academy by ',
                               ),
                               TextSpan(
                                 text: 'Joseph Chamoun',
@@ -191,8 +190,7 @@ class About extends StatelessWidget {
                                 ),
                               ),
                               const TextSpan(
-                                text:
-                                    ' for their expertise in backend development and to ',
+                                text: ' and ',
                               ),
                               TextSpan(
                                 text: 'Rodrique Khoury',
@@ -203,8 +201,7 @@ class About extends StatelessWidget {
                               ),
                               const TextSpan(
                                 text:
-                                    ' for their creativity in designing the user interface. Together, '
-                                    'they have created a platform that is both functional and visually appealing.',
+                                    '. Their collaboration and dedication have resulted in a user-friendly and innovative platform.',
                               ),
                             ],
                           ),

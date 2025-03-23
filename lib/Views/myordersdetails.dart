@@ -11,10 +11,9 @@ class MyOrdersDetails extends StatelessWidget {
       Get.put(MyOrdersDetailsController());
 
   final String? orderId = Get.parameters['orderId'];
-  final String? orderStatus =
-      Get.parameters['orderStatus']; // ✅ Get status from MyOrders page
+  final String? orderStatus = Get.parameters['orderStatus'];
 
-  RxList<String> allquantities = <String>[].obs; // Reactive quantity list
+  RxList<String> allquantities = <String>[].obs;
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +26,12 @@ class MyOrdersDetails extends StatelessWidget {
             fontSize: 20,
           ),
         ),
-        backgroundColor: Colors.purple.shade600,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 22),
           onPressed: () {
-            Get.offAllNamed('/myorders'); // Go back to My Orders page
+            Get.offAllNamed('/myorders');
           },
         ),
         shape: const RoundedRectangleBorder(
@@ -53,14 +52,14 @@ class MyOrdersDetails extends StatelessWidget {
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.local_shipping_outlined,
                           size: 16,
                           color: Colors.white,
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Text(
                           "Shipped",
                           style: TextStyle(
@@ -80,14 +79,14 @@ class MyOrdersDetails extends StatelessWidget {
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.pending_outlined,
                           size: 16,
                           color: Colors.white,
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Text(
                           "Pending",
                           style: TextStyle(
@@ -107,7 +106,10 @@ class MyOrdersDetails extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.purple.withOpacity(0.05), Colors.white],
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              Theme.of(context).colorScheme.inversePrimary.withOpacity(0.2),
+            ],
           ),
         ),
         child: Padding(
@@ -119,14 +121,14 @@ class MyOrdersDetails extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircularProgressIndicator(
-                      color: Colors.purple.shade600,
+                      color: Theme.of(context).colorScheme.primary,
                       strokeWidth: 3,
                     ),
                     const SizedBox(height: 16),
                     Text(
                       "Loading order details...",
                       style: TextStyle(
-                        color: Colors.purple.shade600,
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -188,16 +190,16 @@ class MyOrdersDetails extends StatelessWidget {
                 // Order summary card
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
+                        color: Theme.of(context).shadowColor.withOpacity(0.1),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
                       ),
                     ],
                   ),
@@ -220,13 +222,16 @@ class MyOrdersDetails extends StatelessWidget {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.purple.shade50,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.1),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
                               "${_controller.orderDetails.value!.length} Items",
                               style: TextStyle(
-                                color: Colors.purple.shade700,
+                                color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
                               ),
@@ -234,7 +239,7 @@ class MyOrdersDetails extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      const Divider(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -248,9 +253,9 @@ class MyOrdersDetails extends StatelessWidget {
                           Text(
                             "\$${totalOrderCost.toStringAsFixed(2)}",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: Colors.purple.shade700,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -265,13 +270,23 @@ class MyOrdersDetails extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                   margin: const EdgeInsets.only(bottom: 8),
-                  child: const Text(
-                    "Order Items",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        "Order Items",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -283,16 +298,18 @@ class MyOrdersDetails extends StatelessWidget {
                           _controller.orderDetails.value![index];
 
                       return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
+                        margin: const EdgeInsets.only(bottom: 16),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16.0),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Theme.of(context)
+                                  .shadowColor
+                                  .withOpacity(0.05),
                               spreadRadius: 1,
-                              blurRadius: 6,
-                              offset: const Offset(0, 2),
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
@@ -306,17 +323,22 @@ class MyOrdersDetails extends StatelessWidget {
                                 children: [
                                   // Product image placeholder
                                   Container(
-                                    width: 60,
-                                    height: 60,
+                                    width: 70,
+                                    height: 70,
                                     decoration: BoxDecoration(
-                                      color: Colors.purple.withOpacity(0.1),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Center(
                                       child: Icon(
                                         Icons.shopping_bag_outlined,
-                                        color: Colors.purple.shade600,
-                                        size: 24,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        size: 30,
                                       ),
                                     ),
                                   ),
@@ -336,12 +358,27 @@ class MyOrdersDetails extends StatelessWidget {
                                             color: Colors.black87,
                                           ),
                                         ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          "Unit Price: \$${(order.item?.price ?? 0).toStringAsFixed(2)}",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey.shade600,
+                                        const SizedBox(height: 8),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary
+                                                .withOpacity(0.3),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: Text(
+                                            "Unit: \$${(order.item?.price ?? 0).toStringAsFixed(2)}",
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w500,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(height: 16),
@@ -365,7 +402,7 @@ class MyOrdersDetails extends StatelessWidget {
                                                             .grey.shade100,
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(8),
+                                                                .circular(10),
                                                       ),
                                                       child: Row(
                                                         mainAxisSize:
@@ -381,15 +418,39 @@ class MyOrdersDetails extends StatelessWidget {
                                                           ),
                                                           const SizedBox(
                                                               width: 8),
-                                                          Text(
-                                                            allquantities[
-                                                                index],
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                                          Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        10,
+                                                                    vertical:
+                                                                        2),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                              border:
+                                                                  Border.all(
+                                                                color: Colors
+                                                                    .grey
+                                                                    .shade300,
+                                                              ),
+                                                            ),
+                                                            child: Text(
+                                                              allquantities[
+                                                                  index],
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
                                                             ),
                                                           ),
                                                         ],
@@ -408,7 +469,7 @@ class MyOrdersDetails extends StatelessWidget {
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
-                                                                        8),
+                                                                        10),
                                                           ),
                                                           child: Row(
                                                             mainAxisAlignment:
@@ -581,17 +642,20 @@ class MyOrdersDetails extends StatelessWidget {
                                                     vertical: 8,
                                                   ),
                                                   decoration: BoxDecoration(
-                                                    color:
-                                                        Colors.purple.shade50,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
+                                                        .withOpacity(0.1),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            8),
+                                                            10),
                                                   ),
                                                   child: Text(
                                                     "\$${((order.item?.price ?? 0) * (int.tryParse(allquantities[index]) ?? 1)).toStringAsFixed(2)}",
                                                     style: TextStyle(
-                                                      color: Colors
-                                                          .purple.shade700,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
                                                       fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -639,7 +703,7 @@ class MyOrdersDetails extends StatelessWidget {
                                             .removeAt(index);
                                         allquantities.removeAt(index);
 
-                                        // 🔥 Force UI refresh
+                                        // Force UI refresh
                                         _controller.orderDetails.refresh();
                                       },
                                       child: Container(
@@ -650,7 +714,11 @@ class MyOrdersDetails extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           color: Colors.red.shade50,
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: Colors.red.shade100,
+                                            width: 1,
+                                          ),
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -682,18 +750,21 @@ class MyOrdersDetails extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 if (orderStatus != "shipped")
                   Container(
                     width: double.infinity,
-                    height: 56,
+                    height: 60,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.purple.withOpacity(0.3),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.3),
+                          blurRadius: 15,
+                          offset: const Offset(0, 5),
                         ),
                       ],
                     ),
@@ -737,18 +808,18 @@ class MyOrdersDetails extends StatelessWidget {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple.shade600,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                         elevation: 0,
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.save_outlined, size: 20),
-                          const SizedBox(width: 8),
-                          const Text(
+                          Icon(Icons.save_outlined, size: 20),
+                          SizedBox(width: 8),
+                          Text(
                             "Save Changes",
                             style: TextStyle(
                               fontSize: 16,
