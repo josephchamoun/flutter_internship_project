@@ -1,16 +1,16 @@
-# flutterregistration
+# Epic Toy Store 
 
-A new Flutter project.
+This is a Flutter-based mobile application designed as the phone version of an e-commerce web app built with Laravel. It offers a seamless shopping experience with a user-friendly interface, making it easy to browse products, place orders, and manage your account.
 
-## Getting Started
+Features
+Main Page: Browse and search for products.
 
-This project is a starting point for a Flutter application.
+Contact & About: Learn more about the store and reach out for inquiries.
 
-A few resources to get you started if this is your first Flutter project:
+Orders & Order Details: Track your current and past orders.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Cart: Add, update, or remove items before checkout.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Profile: Manage your personal information.
+
+Authentication: Login, register, and secure your account.
