@@ -75,6 +75,10 @@ class ProfileController extends GetxController {
           update.data['message'] == "Success") {
         ShowSuccessDialog(
             Get.context!, "Success", "Profile Updated Successfully", () {});
+        // Update the shared preferences with new data
+        prefs.setString('user_name', name.text);
+        prefs.setString('user_email', email.text);
+        prefs.setString('user_address', address.text);
       } else {
         ShowSuccessDialog(Get.context!, "Error",
             update.data?['message'] ?? "Profile Update Failed", () {});

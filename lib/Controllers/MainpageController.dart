@@ -85,7 +85,7 @@ class MainpageController extends GetxController {
     try {
       final token = prefs.getString('token');
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/categories'),
+        Uri.parse('http://127.0.0.1:8000/api/categories2'),
         headers: {
           'Authorization': 'Bearer $token',
         },
