@@ -7,6 +7,7 @@ import '../Models/User.dart';
 
 class RegistrationController extends GetxController {
   TextEditingController email = TextEditingController();
+  TextEditingController address = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController password_confirmation = TextEditingController();
@@ -15,13 +16,16 @@ class RegistrationController extends GetxController {
   void submit() {
     String nameValue = name.text.trim();
     String emailValue = email.text.trim();
+    String addressValue = address.text.trim();
     String passwordValue = password.text.trim();
     String passwordConfirmationValue = password_confirmation.text.trim();
 
     if (nameValue.isEmpty) {
       Get.snackbar("Error", "Please enter your name.");
-    } else if (emailValue.isEmpty || !GetUtils.isEmail(emailValue)) {
+    } else if (emailValue.isEmpty) {
       Get.snackbar("Error", "Please enter a valid email.");
+    } else if (addressValue.isEmpty) {
+      Get.snackbar("Error", "Please enter your address.");
     } else if (passwordValue.isEmpty) {
       Get.snackbar("Error", "Please enter your password.");
     } else if (passwordValue.length < 8) {
@@ -48,6 +52,7 @@ class RegistrationController extends GetxController {
       User user = User(
         name: name.text,
         email: email.text,
+        address: address.text,
         password: password.text,
         password_confirmation: password_confirmation.text,
       );

@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileController extends GetxController {
   TextEditingController email = TextEditingController();
+  TextEditingController address = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController oldpassword = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -39,6 +40,7 @@ class ProfileController extends GetxController {
     prefs = await SharedPreferences.getInstance();
     name.text = prefs.getString('user_name') ?? '';
     email.text = prefs.getString('user_email') ?? '';
+    address.text = prefs.getString('user_address') ?? '';
   }
 
   void updateProfile() async {
@@ -53,6 +55,7 @@ class ProfileController extends GetxController {
       User user = User(
         name: name.text,
         email: email.text,
+        address: address.text,
       );
 
       String requestBody = user.toJson();

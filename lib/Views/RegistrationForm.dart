@@ -133,6 +133,46 @@ class Registration extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Text(
+                    "Address",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _registrationController.address,
+                    decoration: InputDecoration(
+                      hintText: '123 Main St, City, Building',
+                      prefixIcon: Icon(
+                        Icons.location_on_outlined,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade200,
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
                     "Password",
                     style: TextStyle(
                       fontSize: 16,

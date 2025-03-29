@@ -65,10 +65,14 @@ class LoginController extends GetxController {
           int userId = post.data['user']['id']; // Get it as an integer
           String userName = post.data['user']['name']; // Get the user's name
           String userEmail = post.data['user']['email']; // Get the user's email
+          String userAddress =
+              post.data['user']['address']; // Get the user's address
 
           prefs.setInt('user_id', userId); // Save user ID as an integer
           prefs.setString('user_name', userName); // Save user name as a string
           prefs.setString('user_email', userEmail); // Save user email as
+          prefs.setString(
+              'user_address', userAddress); // Save user address as a string
 
           ShowSuccessDialog(
               Get.context!, "Success", "User Login Successfully", () {});

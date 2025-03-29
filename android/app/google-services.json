@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "408633740509",
+    "project_id": "epic-toy-store",
+    "storage_bucket": "epic-toy-store.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408633740509:android:a701a57efd274b421cdf34",
+        "android_client_info": {
+          "package_name": "com.example.flutterregistration"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAS6ffrr7s0VggDqmO3bEDK_ER-ttAVGA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

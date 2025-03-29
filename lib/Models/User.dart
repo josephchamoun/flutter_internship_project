@@ -3,6 +3,7 @@ import 'dart:convert';
 class User {
   final String? name;
   final String? email;
+  final String? address;
   final String? oldpassword;
   final String? password;
   final String? password_confirmation;
@@ -10,6 +11,7 @@ class User {
   User(
       {this.name,
       this.email,
+      this.address,
       this.oldpassword,
       this.password,
       this.password_confirmation});
@@ -18,6 +20,7 @@ class User {
     return {
       "name": name,
       "email": email,
+      "address": address,
       "password": password,
       "password_confirmation": password_confirmation
     };

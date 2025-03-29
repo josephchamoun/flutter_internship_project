@@ -89,6 +89,13 @@ class Profile extends StatelessWidget {
                           hint: "Enter your email address",
                           icon: Icons.email_outlined,
                         ),
+                        const SizedBox(height: 16),
+                        _buildTextField(
+                          controller: _profileController.address,
+                          label: "Address",
+                          hint: "Enter your address",
+                          icon: Icons.location_on_outlined,
+                        ),
                         const SizedBox(height: 24),
                         _buildActionButton(
                           context,
